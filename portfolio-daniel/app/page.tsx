@@ -1,27 +1,10 @@
+import SideNav from "./components/SideNav";
+
 export default function Home() {
   return (
     <div style={{ background: "var(--bg)", color: "var(--text-primary)", fontFamily: "var(--font-exo2), sans-serif" }}>
+      <SideNav />
 
-      {/* NAVBAR */}
-      <nav style={{
-        background: "var(--surface)",
-        borderBottom: "1px solid rgba(37,99,235,0.2)",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-      }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
-          <span style={{ fontWeight: 700, fontSize: "1.1rem", letterSpacing: "0.05em" }}>
-            DANIEL <span style={{ color: "var(--primary)" }}>ČERNÝ</span>
-          </span>
-          <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-            {(["SERVICES", "ABOUT", "PROJECTS", "CONTACT"] as const).map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
-            ))}
-            <a href="#contact" className="btn-outline">GET IN TOUCH</a>
-          </div>
-        </div>
-      </nav>
 
       {/* HERO */}
       <section style={{ minHeight: "90vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>

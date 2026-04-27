@@ -81,3 +81,98 @@ html {
   transition: border-color 0.2s;
 }
 .card:hover { border-color: rgba(37,99,235,0.5); }
+
+.side-nav {
+  position: fixed;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  background: rgba(8, 8, 11, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 10px;
+  padding: 0.5rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  overflow: hidden;
+  width: 2.4rem;
+  max-height: 5rem;
+  /* hover-OUT easing: clean, no bounce */
+  transition: width 0.18s ease-in-out,
+              max-height 0.2s ease-in-out,
+              background 0.18s ease,
+              box-shadow 0.18s ease;
+}
+.side-nav:hover {
+  width: 9rem;
+  max-height: 14rem;
+  background: rgba(12, 12, 16, 0.9);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+  /* hover-IN easing: spring */
+  transition: width 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              max-height 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.18s ease,
+              box-shadow 0.18s ease;
+}
+
+.side-nav-link {
+  position: relative;
+  height: 0.7rem;
+  display: block;
+  flex-shrink: 0;
+  border-radius: 5px;
+  text-decoration: none;
+  /* hover-OUT: clean collapse */
+  transition: height 0.15s ease-in-out, background 0.15s ease;
+}
+/* hover-IN: spring + stagger per item */
+.side-nav:hover .side-nav-link:nth-child(1) { height: 1.7rem; transition: height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0s,    background 0.15s ease; }
+.side-nav:hover .side-nav-link:nth-child(2) { height: 1.7rem; transition: height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.03s, background 0.15s ease; }
+.side-nav:hover .side-nav-link:nth-child(3) { height: 1.7rem; transition: height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.06s, background 0.15s ease; }
+.side-nav:hover .side-nav-link:nth-child(4) { height: 1.7rem; transition: height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.09s, background 0.15s ease; }
+.side-nav:hover .side-nav-link:nth-child(5) { height: 1.7rem; transition: height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s, background 0.15s ease; }
+.side-nav-link:hover { background: rgba(255,255,255,0.04); }
+
+.side-nav-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scaleX(1);
+  width: 1.1rem;
+  height: 1.5px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.35), rgba(255,255,255,0.1));
+  border-radius: 2px;
+  opacity: 1;
+  transition: opacity 0.12s ease, transform 0.14s ease;
+}
+.side-nav:hover .side-nav-line {
+  opacity: 0;
+  transform: translate(-50%, -50%) scaleX(0);
+}
+
+.side-nav-text {
+  position: absolute;
+  left: 0.45rem;
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  color: rgba(180,180,190,0.7);
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-family: var(--font-exo2), sans-serif;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  /* hover-OUT: quick fade, no spring */
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+/* hover-IN: slide + stagger */
+.side-nav:hover .side-nav-link:nth-child(1) .side-nav-text { opacity: 1; transform: translateY(-50%) translateX(0); transition: opacity 0.16s ease 0.08s, transform 0.16s ease 0.08s; }
+.side-nav:hover .side-nav-link:nth-child(2) .side-nav-text { opacity: 1; transform: translateY(-50%) translateX(0); transition: opacity 0.16s ease 0.11s, transform 0.16s ease 0.11s; }
+.side-nav:hover .side-nav-link:nth-child(3) .side-nav-text { opacity: 1; transform: translateY(-50%) translateX(0); transition: opacity 0.16s ease 0.14s, transform 0.16s ease 0.14s; }
+.side-nav:hover .side-nav-link:nth-child(4) .side-nav-text { opacity: 1; transform: translateY(-50%) translateX(0); transition: opacity 0.16s ease 0.17s, transform 0.16s ease 0.17s; }
+.side-nav:hover .side-nav-link:nth-child(5) .side-nav-text { opacity: 1; transform: translateY(-50%) translateX(0); transition: opacity 0.16s ease 0.20s, transform 0.16s ease 0.20s; }
+.side-nav-link:hover .side-nav-text { color: rgba(230,230,235,0.95); }

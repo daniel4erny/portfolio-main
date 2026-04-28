@@ -1,9 +1,5 @@
 const links = [
-  { label: "Intro", href: "#intro" },
-  { label: "Usecases", href: "#usecases" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Collections", href: "#collections" },
-  { label: "FAQs", href: "#faqs" },
+  { label: "Hero", href: "#hero" },
 ];
 
 export default function SideNav() {

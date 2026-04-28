@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Exo_2 } from "next/font/google";
 import "./globals.css";
+import Background from "./components/Background";
 
 const exo2 = Exo_2({
   subsets: ["latin"],
@@ -20,8 +21,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs" className={`${exo2.variable} h-full antialiased`}>
+      <head>
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
+      </head>
       <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-exo2), sans-serif" }}>
-        {children}
+        <Background color="#ffffff" quantity={80} size={0.5} staticity={60} />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          {children}
+        </div>
       </body>
     </html>
   );

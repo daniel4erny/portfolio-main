@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 
 const CELL = 8
-const TICK_MS = 50     // 20fps game speed
+const TICK_MS = 50     // 20fps game speedwoeifufuh
 const DENSITY = 0.16
 const MAX_AGE = 28
 const RESPAWN_THRESHOLD = 0.025

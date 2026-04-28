@@ -30,7 +30,7 @@ export default function RootLayout({
         `}</style>
       </head>
       <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-exo2), sans-serif" }}>
-        <Background color="#ffffff" quantity={80} size={0.5} staticity={60} />
+        <Background />
         <div style={{ position: "relative", zIndex: 1 }}>
           {children}
         </div>

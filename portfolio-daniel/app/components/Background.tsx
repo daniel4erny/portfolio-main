@@ -1,213 +1,141 @@
 "use client"
 
-import type React from "react"
-import { useEffect, useRef, useState } from "react"
-import { cn } from "@/lib/utils"
+import { useEffect, useRef } from "react"
 
-interface MousePosition {
-  x: number
-  y: number
+const CELL = 8
+const TICK_MS = 50     // 20fps game speed
+const DENSITY = 0.16
+const MAX_AGE = 28
+const RESPAWN_THRESHOLD = 0.025
+
+// gray-blue → primary blue → accent cyan/teal
+const STOPS: [number, number, number][] = [
+  [51,  65,  85],   // slate-700
+  [37,  99, 235],   // primary blue
+  [6,  182, 212],   // cyan-500
+  [20, 184, 166],   // teal-400
+]
+
+function lerp(t: number): [number, number, number] {
+  const n = STOPS.length - 1
+  const si = Math.min(Math.floor(t * n), n - 1)
+  const f = t * n - si
+  const [r1, g1, b1] = STOPS[si]
+  const [r2, g2, b2] = STOPS[si + 1]
+  return [r1 + (r2 - r1) * f | 0, g1 + (g2 - g1) * f | 0, b1 + (b2 - b1) * f | 0]
 }
 
-function useMousePosition(): MousePosition {
-  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 })
+// precompute color strings for all possible ages
+const COLOR_TABLE = Array.from({ length: MAX_AGE + 1 }, (_, age) => {
+  const t = age / MAX_AGE
+  const [r, g, b] = lerp(t)
+  const a = (0.06 + t * 0.22).toFixed(3)
+  return `rgba(${r},${g},${b},${a})`
+})
+
+export default function Background() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      setMousePosition({ x: event.clientX, y: event.clientY })
+    const canvas = canvasRef.current!
+    const ctx = canvas.getContext("2d")!
+
+    let cols = 0, rows = 0
+    let cur: Uint8Array, nxt: Uint8Array
+    let ages: Uint8Array, nxtAges: Uint8Array
+    let raf: number
+    let lastTick = 0
+
+    function init() {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+      cols = Math.ceil(canvas.width / CELL)
+      rows = Math.ceil(canvas.height / CELL)
+      const n = cols * rows
+      cur      = new Uint8Array(n)
+      nxt      = new Uint8Array(n)
+      ages     = new Uint8Array(n)
+      nxtAges  = new Uint8Array(n)
+      for (let i = 0; i < n; i++) cur[i] = Math.random() < DENSITY ? 1 : 0
     }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
+
+    function step() {
+      nxt.fill(0)
+      nxtAges.fill(0)
+      let alive = 0
+
+      for (let y = 0; y < rows; y++) {
+        const ym = ((y - 1 + rows) % rows) * cols
+        const yc = y * cols
+        const yp = ((y + 1) % rows) * cols
+
+        for (let x = 0; x < cols; x++) {
+          const xm = (x - 1 + cols) % cols
+          const xp = (x + 1) % cols
+
+          const n =
+            cur[ym + xm] + cur[ym + x] + cur[ym + xp] +
+            cur[yc + xm] +               cur[yc + xp] +
+            cur[yp + xm] + cur[yp + x] + cur[yp + xp]
+
+          const i = yc + x
+          if (cur[i]) {
+            if (n === 2 || n === 3) {
+              nxt[i] = 1
+              nxtAges[i] = Math.min(ages[i] + 1, MAX_AGE)
+              alive++
+            }
+          } else if (n === 3) {
+            nxt[i] = 1
+            alive++
+          }
+        }
+      }
+
+      const tmp = cur;    cur = nxt;         nxt = tmp
+      const tmp2 = ages;  ages = nxtAges;    nxtAges = tmp2
+
+      if (alive < cur.length * RESPAWN_THRESHOLD) init()
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for (let y = 0; y < rows; y++) {
+        const yc = y * cols
+        for (let x = 0; x < cols; x++) {
+          const i = yc + x
+          if (cur[i]) {
+            ctx.fillStyle = COLOR_TABLE[ages[i]]
+            ctx.fillRect(x * CELL, y * CELL, CELL - 1, CELL - 1)
+          }
+        }
+      }
+    }
+
+    function loop(ts: number) {
+      raf = requestAnimationFrame(loop)
+      if (ts - lastTick >= TICK_MS) {
+        lastTick = ts
+        step()
+        draw()
+      }
+    }
+
+    init()
+    draw()
+    requestAnimationFrame(loop)
+    window.addEventListener("resize", init)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("resize", init)
+    }
   }, [])
 
-  return mousePosition
-}
-
-interface Circle {
-  x: number
-  y: number
-  translateX: number
-  translateY: number
-  size: number
-  alpha: number
-  targetAlpha: number
-  dx: number
-  dy: number
-  magnetism: number
-}
-
-interface ParticlesProps {
-  className?: string
-  quantity?: number
-  staticity?: number
-  ease?: number
-  size?: number
-  refresh?: boolean
-  color?: string
-  vx?: number
-  vy?: number
-}
-
-function hexToRgb(hex: string): number[] {
-  let normalized = hex.replace("#", "")
-  if (normalized.length === 3) {
-    normalized = normalized.split("").map(c => c + c).join("")
-  }
-  const hexInt = Number.parseInt(normalized, 16)
-  return [(hexInt >> 16) & 255, (hexInt >> 8) & 255, hexInt & 255]
-}
-
-function Particles({
-  className,
-  quantity = 80,
-  staticity = 50,
-  ease = 50,
-  size = 0.4,
-  refresh = false,
-  color = "#ffffff",
-  vx = 0,
-  vy = 0,
-}: ParticlesProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const canvasContainerRef = useRef<HTMLDivElement>(null)
-  const context = useRef<CanvasRenderingContext2D | null>(null)
-  const circles = useRef<Circle[]>([])
-  const mousePosition = useMousePosition()
-  const mouse = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
-  const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 })
-  const animationRef = useRef<number>()
-  const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1
-
-  useEffect(() => {
-    if (canvasRef.current) {
-      context.current = canvasRef.current.getContext("2d")
-    }
-    initCanvas()
-    animate()
-    window.addEventListener("resize", initCanvas)
-    return () => {
-      window.removeEventListener("resize", initCanvas)
-      if (animationRef.current) cancelAnimationFrame(animationRef.current)
-    }
-  }, [color])
-
-  useEffect(() => { onMouseMove() }, [mousePosition.x, mousePosition.y])
-  useEffect(() => { initCanvas() }, [refresh])
-
-  const initCanvas = () => { resizeCanvas(); drawParticles() }
-
-  const onMouseMove = () => {
-    if (canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect()
-      const { w, h } = canvasSize.current
-      const x = mousePosition.x - rect.left - w / 2
-      const y = mousePosition.y - rect.top - h / 2
-      if (x < w / 2 && x > -w / 2 && y < h / 2 && y > -h / 2) {
-        mouse.current.x = x
-        mouse.current.y = y
-      }
-    }
-  }
-
-  const resizeCanvas = () => {
-    if (canvasContainerRef.current && canvasRef.current && context.current) {
-      circles.current.length = 0
-      canvasSize.current.w = canvasContainerRef.current.offsetWidth
-      canvasSize.current.h = canvasContainerRef.current.offsetHeight
-      canvasRef.current.width = canvasSize.current.w * dpr
-      canvasRef.current.height = canvasSize.current.h * dpr
-      canvasRef.current.style.width = `${canvasSize.current.w}px`
-      canvasRef.current.style.height = `${canvasSize.current.h}px`
-      context.current.scale(dpr, dpr)
-    }
-  }
-
-  const circleParams = (): Circle => ({
-    x: Math.floor(Math.random() * canvasSize.current.w),
-    y: Math.floor(Math.random() * canvasSize.current.h),
-    translateX: 0,
-    translateY: 0,
-    size: Math.floor(Math.random() * 2) + size,
-    alpha: 0,
-    targetAlpha: Number.parseFloat((Math.random() * 0.6 + 0.1).toFixed(1)),
-    dx: (Math.random() - 0.5) * 0.1,
-    dy: (Math.random() - 0.5) * 0.1,
-    magnetism: 0.1 + Math.random() * 4,
-  })
-
-  const rgb = hexToRgb(color)
-
-  const drawCircle = (circle: Circle, update = false) => {
-    if (context.current) {
-      const { x, y, translateX, translateY, size: s, alpha } = circle
-      context.current.translate(translateX, translateY)
-      context.current.beginPath()
-      context.current.arc(x, y, s, 0, 2 * Math.PI)
-      context.current.fillStyle = `rgba(${rgb.join(", ")}, ${alpha})`
-      context.current.fill()
-      context.current.setTransform(dpr, 0, 0, dpr, 0, 0)
-      if (!update) circles.current.push(circle)
-    }
-  }
-
-  const clearContext = () => {
-    if (context.current) {
-      context.current.clearRect(0, 0, canvasSize.current.w, canvasSize.current.h)
-    }
-  }
-
-  const drawParticles = () => {
-    clearContext()
-    for (let i = 0; i < quantity; i++) drawCircle(circleParams())
-  }
-
-  const remapValue = (value: number, s1: number, e1: number, s2: number, e2: number) => {
-    const r = ((value - s1) * (e2 - s2)) / (e1 - s1) + s2
-    return r > 0 ? r : 0
-  }
-
-  const animate = () => {
-    clearContext()
-    circles.current.forEach((circle, i) => {
-      const edge = [
-        circle.x + circle.translateX - circle.size,
-        canvasSize.current.w - circle.x - circle.translateX - circle.size,
-        circle.y + circle.translateY - circle.size,
-        canvasSize.current.h - circle.y - circle.translateY - circle.size,
-      ]
-      const closest = edge.reduce((a, b) => Math.min(a, b))
-      const remap = Number.parseFloat(remapValue(closest, 0, 20, 0, 1).toFixed(2))
-      if (remap > 1) {
-        circle.alpha += 0.02
-        if (circle.alpha > circle.targetAlpha) circle.alpha = circle.targetAlpha
-      } else {
-        circle.alpha = circle.targetAlpha * remap
-      }
-      circle.x += circle.dx + vx
-      circle.y += circle.dy + vy
-      circle.translateX += (mouse.current.x / (staticity / circle.magnetism) - circle.translateX) / ease
-      circle.translateY += (mouse.current.y / (staticity / circle.magnetism) - circle.translateY) / ease
-      drawCircle(circle, true)
-      if (
-        circle.x < -circle.size || circle.x > canvasSize.current.w + circle.size ||
-        circle.y < -circle.size || circle.y > canvasSize.current.h + circle.size
-      ) {
-        circles.current.splice(i, 1)
-        drawCircle(circleParams())
-      }
-    })
-    animationRef.current = window.requestAnimationFrame(animate)
-  }
-
   return (
-    <div
-      ref={canvasContainerRef}
-      className={cn("fixed inset-0 overflow-hidden pointer-events-none", className)}
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 w-full h-full pointer-events-none"
       style={{ zIndex: 0 }}
-    >
-      <canvas className="absolute inset-0 size-full" ref={canvasRef} />
-    </div>
+    />
   )
 }
-
-export default Particles

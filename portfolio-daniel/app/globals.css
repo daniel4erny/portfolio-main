@@ -16,7 +16,7 @@
   --color-accent: var(--accent);
   --color-text-secondary: var(--text-secondary);
   --color-text-primary: var(--text-primary);
-  --font-sans: 'Exo 2', sans-serif;
+  --font-sans: 'Space Grotesk', sans-serif;
 }
 
 * {
@@ -29,7 +29,7 @@ html,
 body {
   background: #000 !important;
   color: var(--text-primary);
-  font-family: var(--font-exo2), sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
 }
 
 html {
@@ -173,7 +173,7 @@ html {
   color: rgba(180,180,190,1);
   font-size: 1.2rem;
   font-weight: 400;
-  font-family: var(--font-exo2), sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   letter-spacing: 0.01em;
   white-space: nowrap;
   opacity: 0;

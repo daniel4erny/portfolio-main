@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Exo_2 } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Background from "./components/Background";
 
-const exo2 = Exo_2({
-  subsets: ["latin"],
-  weight: ["300", "400", "600", "700", "800"],
-  variable: "--font-exo2",
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -20,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs" className={`${exo2.variable} h-full antialiased`}>
+    <html lang="cs" className={`${spaceGrotesk.variable} h-full antialiased`}>
       <head>
         <style>{`
           @keyframes fadeUp {
@@ -29,7 +28,7 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-exo2), sans-serif" }}>
+      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
         <Background />
         <div style={{ position: "relative", zIndex: 1 }}>
           {children}

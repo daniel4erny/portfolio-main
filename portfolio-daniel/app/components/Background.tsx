@@ -33,12 +33,27 @@ const COLOR_TABLE = Array.from({ length: MAX_AGE + 1 }, (_, age) => {
   return `rgba(${r},${g},${b},${a})`
 })
 
-export default function Background() {
+interface BackgroundProps {
+  color?: string
+  quantity?: number
+  size?: number
+  staticity?: number
+}
+
+export default function Background({
+  color,
+  quantity = DENSITY,
+  size = CELL,
+  staticity,
+}: BackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current!
     const ctx = canvas.getContext("2d")!
+    const cellSize = size
+    const density = quantity
+    const tickMs = staticity != null ? staticity : TICK_MS
 
     let cols = 0, rows = 0
     let cur: Uint8Array, nxt: Uint8Array
@@ -49,14 +64,14 @@ export default function Background() {
     function init() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
-      cols = Math.ceil(canvas.width / CELL)
-      rows = Math.ceil(canvas.height / CELL)
+      cols = Math.ceil(canvas.width / cellSize)
+      rows = Math.ceil(canvas.height / cellSize)
       const n = cols * rows
       cur      = new Uint8Array(n)
       nxt      = new Uint8Array(n)
       ages     = new Uint8Array(n)
       nxtAges  = new Uint8Array(n)
-      for (let i = 0; i < n; i++) cur[i] = Math.random() < DENSITY ? 1 : 0
+      for (let i = 0; i < n; i++) cur[i] = Math.random() < density ? 1 : 0
     }
 
     function step() {
@@ -105,8 +120,8 @@ export default function Background() {
         for (let x = 0; x < cols; x++) {
           const i = yc + x
           if (cur[i]) {
-            ctx.fillStyle = COLOR_TABLE[ages[i]]
-            ctx.fillRect(x * CELL, y * CELL, CELL - 1, CELL - 1)
+            ctx.fillStyle = color ?? COLOR_TABLE[ages[i]]
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize - 1, cellSize - 1)
           }
         }
       }
@@ -114,7 +129,7 @@ export default function Background() {
 
     function loop(ts: number) {
       raf = requestAnimationFrame(loop)
-      if (ts - lastTick >= TICK_MS) {
+      if (ts - lastTick >= tickMs) {
         lastTick = ts
         step()
         draw()

@@ -87,10 +87,10 @@ export default function Hero() {
           }}
         >
           <a href="#projects" className="btn-outline">
-            Projekty
+            Projects
           </a>
           <a href="#contact" className="btn-ghost">
-            Kontakt
+            Contact
           </a>
         </div>
       </div>

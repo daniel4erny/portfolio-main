@@ -57,32 +57,39 @@ html {
 .nav-link:hover { color: var(--text-primary); }
 
 .btn-outline {
-  background: transparent;
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  padding: 0.45rem 1.2rem;
-  font-size: 0.8rem;
+  background: var(--primary);
+  border: none;
+  color: #fff;
+  padding: 0.875rem 2.25rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
   text-decoration: none;
-  border-radius: 2px;
-  transition: all 0.2s;
+  border-radius: 10px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.3);
 }
-.btn-outline:hover { background: var(--primary); color: #fff; }
+.btn-outline:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 20px rgba(37,99,235,0.45);
+}
 
 .btn-ghost {
   background: transparent;
   color: var(--text-primary);
-  padding: 0.8rem 2rem;
+  padding: 0.875rem 2.25rem;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  border-radius: 2px;
-  border: 1px solid rgba(255,255,255,0.15);
-  transition: border-color 0.2s;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
-.btn-ghost:hover { border-color: rgba(255,255,255,0.4); }
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.35);
+}
 
 .card {
   background: var(--surface);

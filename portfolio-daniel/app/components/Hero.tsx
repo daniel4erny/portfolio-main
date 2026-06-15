@@ -1,96 +1,39 @@
-const fadeUp = (delay: string) => ({
-  animation: `fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) ${delay} both`,
-});
-
 export default function Hero() {
   return (
     <section
       id="hero"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "flex-start",
-        padding: "8vh 16vw 0",
-      }}
+      className="flex min-h-screen items-start px-[16vw] pt-[8vh]"
     >
-      <div style={{ paddingTop: "8vh" }}>
-        <p
-          style={{
-            ...fadeUp("0.1s"),
-            fontSize: "0.72rem",
-            fontWeight: 600,
-            letterSpacing: "0.24em",
-            color: "var(--accent)",
-            marginBottom: "1.8rem",
-            textTransform: "uppercase",
-          }}
-        >
+      <div className="pt-[8vh]">
+        <p className="fade-up [animation-delay:0.1s] mb-[1.8rem] text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-accent">
           Portfolio — 2026
         </p>
 
-        <h1
-          style={{
-            ...fadeUp("0.25s"),
-            fontSize: "clamp(2rem, 4.5vw, 4.5rem)",
-            fontWeight: 700,
-            lineHeight: 1.08,
-            letterSpacing: "-0.03em",
-            marginBottom: "0.2rem",
-            color: "var(--text-primary)",
-          }}
-        >
+        <h1 className="fade-up [animation-delay:0.25s] mb-[0.2rem] text-[clamp(2rem,4.5vw,4.5rem)] font-bold leading-[1.08] tracking-[-0.03em] text-text-primary">
           Software developer and
           <br />
           cybersecurity engineer
         </h1>
 
-        <span
-          style={{
-            ...fadeUp("0.4s"),
-            display: "block",
-            fontSize: "clamp(2rem, 4.5vw, 4.5rem)",
-            fontWeight: 700,
-            color: "var(--accent)",
-            lineHeight: 1.08,
-            letterSpacing: "-0.03em",
-            marginBottom: "2.4rem",
-          }}
-        >
+        <span className="fade-up [animation-delay:0.4s] mb-[2.4rem] block text-[clamp(2rem,4.5vw,4.5rem)] font-bold leading-[1.08] tracking-[-0.03em] text-accent">
           Daniel Černý
         </span>
 
-        <p
-          style={{
-            ...fadeUp("0.55s"),
-            fontSize: "clamp(1rem, 1.4vw, 1.25rem)",
-            color: "var(--text-secondary)",
-            fontWeight: 400,
-            lineHeight: 1.7,
-            maxWidth: "44ch",
-            marginBottom: "2.8rem",
-          }}
-        >
+        <p className="fade-up [animation-delay:0.55s] mb-[2.8rem] max-w-[44ch] text-[clamp(1rem,1.4vw,1.25rem)] font-normal leading-[1.7] text-text-secondary">
           Building secure, high-performance software — from full-stack
           web apps to network infrastructure and penetration testing.
           <br />
-          <span style={{ color: "var(--text-primary)", opacity: 0.45, fontSize: "0.82em" }}>
+          <span className="text-[0.82em] text-text-primary opacity-[0.45]">
             Prague, CZ
           </span>
         </p>
 
-        <div
-          style={{
-            ...fadeUp("0.7s"),
-            display: "flex",
-            gap: "1rem",
-            flexWrap: "wrap",
-          }}
-        >
-          <a href="#projects" className="btn-outline">
-            Projects
+        <div className="fade-up [animation-delay:0.7s] flex flex-wrap gap-5">
+          <a href="#projects" className="btn-glass btn-glass--primary">
+            <span className="btn-label">Projects</span>
           </a>
-          <a href="#contact" className="btn-ghost">
-            Contact
+          <a href="#contact" className="btn-glass btn-glass--accent">
+            <span className="btn-label">Contact</span>
           </a>
         </div>
       </div>

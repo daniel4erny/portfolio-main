@@ -28,11 +28,9 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
+      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-space-grotesk), sans-serif", isolation: "isolate" }}>
         <Background />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   );

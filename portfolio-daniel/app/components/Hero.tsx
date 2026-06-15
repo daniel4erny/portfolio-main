@@ -10,7 +10,7 @@ export default function Hero() {
         minHeight: "100vh",
         display: "flex",
         alignItems: "flex-start",
-        padding: "8vh 8vw 0",
+        padding: "8vh 16vw 0",
       }}
     >
       <div style={{ paddingTop: "8vh" }}>

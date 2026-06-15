@@ -1,5 +1,6 @@
 const links = [
   { label: "Hero", href: "#hero" },
+  { label: "Skills", href: "#skills" },
 ];
 
 export default function SideNav() {

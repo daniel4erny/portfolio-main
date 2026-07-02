@@ -51,6 +51,82 @@ html {
   animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(145deg, #0f1520 0%, #0a0e17 60%, #060910 100%);
+  padding: 1.75rem;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.project-card:hover {
+  border-color: rgba(6,182,212,0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 24px rgba(6,182,212,0.06);
+}
+
+.project-arrow {
+  color: rgba(255,255,255,0.25);
+  font-size: 1.1rem;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.project-card:hover .project-arrow {
+  color: var(--accent);
+  transform: translate(3px, -3px);
+}
+
+.chip {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.project-card:hover .chip {
+  color: rgba(255,255,255,0.55);
+  border-color: rgba(255,255,255,0.18);
+}
+
+.stat-block {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #0f1520 0%, #0a0e17 100%);
+  padding: 1.4rem 1.6rem;
+}
+
+.social-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  transition: color 0.2s ease;
+}
+.social-link:hover { color: var(--accent); }
+
 .nav-link {
   color: var(--text-secondary);
   text-decoration: none;

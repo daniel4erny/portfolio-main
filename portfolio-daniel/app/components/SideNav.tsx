@@ -1,6 +1,9 @@
 const links = [
   { label: "Hero", href: "#hero" },
   { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function SideNav() {

@@ -1,6 +1,7 @@
 "use client";
 
 import Tilt from "react-parallax-tilt";
+import Reveal from "./Reveal";
 
 type Card = {
   title: string;
@@ -31,9 +32,9 @@ const CARDS: Card[] = [
 
 function TiltCard({ card, index }: { card: Card; index: number }) {
   return (
-    <div
-      className="fade-up grow shrink basis-[280px]"
-      style={{ animationDelay: `${0.15 + index * 0.12}s` }}
+    <Reveal
+      className="grow shrink basis-[280px]"
+      delay={0.1 + index * 0.08}
     >
       <Tilt
         tiltMaxAngleX={14}
@@ -64,27 +65,25 @@ function TiltCard({ card, index }: { card: Card; index: number }) {
           </p>
         </div>
       </Tilt>
-    </div>
+    </Reveal>
   );
 }
 
 export default function Cards() {
   return (
     <section id="skills" className="px-[16vw] pb-[10vh]">
-      <p
-        className="fade-up text-[0.72rem] font-semibold tracking-[0.24em] text-accent uppercase mb-3"
-        style={{ animationDelay: "0.1s" }}
-      >
-        Lorem Ipsum
-      </p>
+      <Reveal>
+        <p className="text-[0.72rem] font-semibold tracking-[0.24em] text-accent uppercase mb-3">
+          Lorem Ipsum
+        </p>
+      </Reveal>
 
-      <h2
-        className="fade-up text-[clamp(1.6rem,3vw,2.6rem)] font-bold tracking-[-0.03em] text-text-primary mb-12 leading-[1.1]"
-        style={{ animationDelay: "0.2s" }}
-      >
-        Lorem ipsum dolor.{" "}
-        <span className="text-text-secondary font-normal">Sit amet.</span>
-      </h2>
+      <Reveal delay={0.08}>
+        <h2 className="text-[clamp(1.6rem,3vw,2.6rem)] font-bold tracking-[-0.03em] text-text-primary mb-12 leading-[1.1]">
+          Lorem ipsum dolor.{" "}
+          <span className="text-text-secondary font-normal">Sit amet.</span>
+        </h2>
+      </Reveal>
 
       <div className="flex gap-6 flex-wrap items-stretch">
         {CARDS.map((card, i) => (

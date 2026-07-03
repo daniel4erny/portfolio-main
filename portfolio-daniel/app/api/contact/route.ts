@@ -1,7 +1,5 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 // Resend test mode only delivers to the account owner's address.
 // After verifying a domain at resend.com/domains, update `from` below too.
 const TO_EMAIL = "djt.goddaddy@gmail.com";
@@ -25,6 +23,7 @@ export async function POST(request: Request) {
     );
   }
 
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const { error } = await resend.emails.send({
     from: "Portfolio <onboarding@resend.dev>",
     to: TO_EMAIL,

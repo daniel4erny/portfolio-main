@@ -29,11 +29,11 @@ export default function Hero() {
         </p>
 
         <div className="fade-up [animation-delay:0.7s] flex flex-wrap gap-5">
-          <a href="#projects" className="btn-glass btn-glass--primary">
-            <span className="btn-label">Projects</span>
+          <a href="#projects" className="btn btn--primary">
+            Projects
           </a>
-          <a href="#contact" className="btn-glass btn-glass--accent">
-            <span className="btn-label">Contact</span>
+          <a href="#contact" className="btn btn--secondary">
+            Contact
           </a>
         </div>
       </div>

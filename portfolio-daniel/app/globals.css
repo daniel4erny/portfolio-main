@@ -137,77 +137,89 @@ html {
 }
 .nav-link:hover { color: var(--text-primary); }
 
-/* ── liquid glass ─────────────────────────────── */
-.btn-glass {
-  position: relative;
-  isolation: isolate;
+/* ── buttons ─────────────────────────────────── */
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1.05rem 2.85rem;
-  border-radius: 16px;
+  padding: 0.85rem 2.1rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
   text-decoration: none;
-  overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08) 55%, rgba(255,255,255,0.05));
-  border: 1px solid rgba(255,255,255,0.22);
-  box-shadow:
-    0 8px 32px rgba(0,0,0,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.45),
-    inset 0 -1px 0 rgba(255,255,255,0.06);
-  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1),
-              box-shadow 0.25s ease,
-              border-color 0.25s ease,
-              background 0.25s ease;
-}
-/* colored inner glow so glass is visible on black bg */
-.btn-glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.95;
-  transition: opacity 0.25s ease;
-}
-.btn-glass--primary::before {
-  background: radial-gradient(130% 130% at 30% 0%, rgba(37,99,235,0.9), rgba(37,99,235,0.45) 70%, rgba(37,99,235,0.3));
-}
-.btn-glass--accent::before {
-  background: radial-gradient(130% 130% at 30% 0%, rgba(6,182,212,0.85), rgba(6,182,212,0.4) 70%, rgba(6,182,212,0.25));
-}
-.btn-glass:hover {
-  transform: translateY(-3px) scale(1.015);
-  border-color: rgba(255,255,255,0.4);
-  box-shadow:
-    0 14px 44px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.6),
-    inset 0 -1px 0 rgba(255,255,255,0.08);
-}
-.btn-glass:hover::before { opacity: 1; }
-.btn-glass:active { transform: translateY(-1px) scale(1); }
-
-.btn-label {
-  position: relative;
-  display: inline-block;
-  color: #fff;
-  font-size: 1.05rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+  transition: background 0.2s ease, border-color 0.2s ease,
+              color 0.2s ease, transform 0.15s ease;
 }
-.btn-label::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -0.35rem;
-  width: 0;
-  height: 1.5px;
-  background: rgba(255,255,255,0.9);
-  transform: translateX(-50%);
-  transition: width 0.25s ease;
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn--primary {
+  background: var(--primary);
+  color: #fff;
 }
-.btn-glass:hover .btn-label::after { width: 100%; }
+.btn--primary:hover { background: #1d4ed8; }
+
+.btn--secondary {
+  background: transparent;
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text-primary);
+}
+.btn--secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+
+/* ── contact form ────────────────────────────── */
+.form-field {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.92rem;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.form-field::placeholder { color: rgba(148,163,184,0.55); }
+.form-field:focus {
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.05);
+}
+textarea.form-field { resize: vertical; min-height: 8.5rem; }
 
 .card {
   background: var(--surface);

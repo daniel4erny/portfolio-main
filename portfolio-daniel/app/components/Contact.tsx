@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import ContactForm from "./ContactForm";
 
 const SOCIALS = [
   { label: "GitHub", href: "#" },
@@ -46,7 +47,11 @@ export default function Contact() {
         </div>
       </Reveal>
 
-      <Reveal delay={0.32}>
+      <Reveal delay={0.32} className="w-full flex justify-center mb-12">
+        <ContactForm />
+      </Reveal>
+
+      <Reveal delay={0.4}>
         <div className="flex gap-8 justify-center">
           {SOCIALS.map((s) => (
             <a key={s.label} href={s.href} className="social-link">

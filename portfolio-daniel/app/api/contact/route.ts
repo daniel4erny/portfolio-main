@@ -1,7 +1,6 @@
 import { Resend } from "resend";
 
-// Resend test mode only delivers to the account owner's address.
-// After verifying a domain at resend.com/domains, update `from` below too.
+const FROM = "Daniel Černý <portfolio@djt-group.com>";
 const TO_EMAIL = "djt.goddaddy@gmail.com";
 
 export async function POST(request: Request) {
@@ -24,8 +23,10 @@ export async function POST(request: Request) {
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);
+
+  // notification to site owner
   const { error } = await resend.emails.send({
-    from: "Portfolio <onboarding@resend.dev>",
+    from: FROM,
     to: TO_EMAIL,
     replyTo: email,
     subject: `Portfolio contact from ${name}`,
@@ -35,6 +36,14 @@ export async function POST(request: Request) {
   if (error) {
     return Response.json({ error: error.message }, { status: 502 });
   }
+
+  // confirmation to the visitor — best-effort, don't fail the request over it
+  await resend.emails.send({
+    from: FROM,
+    to: email,
+    subject: "I got your message — Daniel Černý",
+    text: `Hi ${name},\n\nthanks for reaching out — your message has been received and I'll get back to you as soon as I can.\n\nYour message:\n${message}\n\n— Daniel Černý\ndaniel.djt-group.com`,
+  });
 
   return Response.json({ ok: true });
 }

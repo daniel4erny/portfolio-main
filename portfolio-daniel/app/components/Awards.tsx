@@ -57,16 +57,21 @@ export default function Awards() {
                 <p className="mt-3 max-w-[62ch] text-[0.87rem] leading-[1.8] text-text-secondary">
                   {a.detail}
                 </p>
-                {a.href && (
-                  <a
-                    href={a.href}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="meta-link mt-3"
-                  >
-                    {new URL(a.href).host.replace(/^www\./, "")}
-                    <IconArrow width={13} height={13} />
-                  </a>
+                {a.links && (
+                  <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                    {a.links.map((l) => (
+                      <a
+                        key={l.href}
+                        href={l.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="meta-link"
+                      >
+                        {l.label}
+                        <IconArrow width={13} height={13} />
+                      </a>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>

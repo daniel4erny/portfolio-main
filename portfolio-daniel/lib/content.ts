@@ -116,6 +116,17 @@ export const projects: Project[] = [
   },
   {
     index: "03",
+    title: "DOOM Museum",
+    kicker: "Built in 24 hours at a hackathon",
+    status: "Live",
+    body: "A bilingual museum for the DOOM franchise, built from an empty repo inside the 24 hours of the GJS hackathon — and good for third place. A weapons catalogue and a games timeline you page through, an archive of sound effects, 3D models and artwork, and a /play route that boots DOOM (1993) in the browser on an MS-DOS emulation core, keybindings and all.",
+    tech: ["Next.js", "TypeScript", "DOS emulation", "EN / CZ"],
+    primary: "https://doom.djt-group.com",
+    links: [{ label: "doom.djt-group.com", href: "https://doom.djt-group.com", kind: "live" }],
+    featured: true,
+  },
+  {
+    index: "04",
     title: "gowlan",
     kicker: "Live chat over WebSockets",
     body: "A LAN chat server in pure Go. A hub goroutine owns every connection and fans messages out over channels, so registration, removal and broadcast never touch a mutex; ping/pong keepalives with read deadlines drop dead clients on their own. The client is a Bubble Tea TUI, the server ships as a Docker image.",
@@ -124,7 +135,7 @@ export const projects: Project[] = [
     links: [{ label: "Source", href: "https://github.com/daniel4erny/gowlan", kind: "code" }],
   },
   {
-    index: "04",
+    index: "05",
     title: "minesweeper-go",
     kicker: "Minesweeper in the terminal",
     body: "Minesweeper rebuilt on tcell, entirely keyboard-driven. Beginner, normal and expert presets plus custom boards, flood-fill reveal on empty cells, flagging, win detection and a live timer. Packaged for Arch Linux on the AUR and released into the public domain under the Unlicense.",
@@ -144,7 +155,7 @@ export type Award = {
   org: string;
   places: Placement[];
   detail: string;
-  href?: string;
+  links?: { label: string; href: string }[];
 };
 
 export const awards: Award[] = [
@@ -158,7 +169,7 @@ export const awards: Award[] = [
     ],
     detail:
       "Second in the regional round and seventh nationally in the first year of the Czech AI Olympiad — training models on real data and defending the solution in front of a technical jury. It is the national qualifier for the International Olympiad in AI.",
-    href: "https://www.aiolympiada.cz/",
+    links: [{ label: "aiolympiada.cz", href: "https://www.aiolympiada.cz/" }],
   },
   {
     year: "2026",
@@ -166,8 +177,11 @@ export const awards: Award[] = [
     org: "Gymnázium Jaroslava Seiferta, Prague",
     places: [{ place: "3", ordinal: "rd", note: "of 18 teams" }],
     detail:
-      "24 hours non-stop, 18 three-person teams from across the country, one web app built from nothing and pitched at the end to a jury of engineers from software companies.",
-    href: "https://www.gymjs.cz/2026/03/14/hackathon-13-14-3/",
+      "24 hours non-stop, 18 three-person teams from across the country, one web app built from nothing and pitched at the end to a jury of engineers from software companies. What came out of ours is DOOM Museum, and it is still up.",
+    links: [
+      { label: "doom.djt-group.com", href: "https://doom.djt-group.com" },
+      { label: "gymjs.cz", href: "https://www.gymjs.cz/2026/03/14/hackathon-13-14-3/" },
+    ],
   },
   {
     year: "2025",
@@ -176,7 +190,7 @@ export const awards: Award[] = [
     places: [{ place: "21", ordinal: "st", note: "overall" }],
     detail:
       "21st in the overall national ranking of the Czech secondary-school cybersecurity competition, run with the National Cyber and Information Security Agency as expert guarantor.",
-    href: "https://www.kybersoutez.cz/",
+    links: [{ label: "kybersoutez.cz", href: "https://www.kybersoutez.cz/" }],
   },
   {
     year: "2024",
@@ -185,7 +199,7 @@ export const awards: Award[] = [
     places: [{ place: "2", ordinal: "nd", note: "junior category" }],
     detail:
       "Second place nationally in the junior category: cryptography, network forensics, web exploitation and the security theory underneath all three.",
-    href: "https://www.kybersoutez.cz/",
+    links: [{ label: "kybersoutez.cz", href: "https://www.kybersoutez.cz/" }],
   },
 ];
 

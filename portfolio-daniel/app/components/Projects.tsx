@@ -121,8 +121,8 @@ export default function Projects() {
 
       <Reveal delay={0.06}>
         <h2 className="h2 max-w-[26ch]">
-          Four things I built.{" "}
-          <span className="muted">Two are live, all four are real.</span>
+          Five things I built.{" "}
+          <span className="muted">Three are live, all five are real.</span>
         </h2>
       </Reveal>
 

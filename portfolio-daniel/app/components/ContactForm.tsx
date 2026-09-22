@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IconArrow } from "./Icons";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -32,48 +33,73 @@ export default function ContactForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-[34rem] flex flex-col gap-4 text-left"
-    >
-      <div className="flex flex-col sm:flex-row gap-4">
-        <input
+    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-5 text-left">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label className="field-label" htmlFor="cf-name">
+            Name
+          </label>
+          <input
+            id="cf-name"
+            className="form-field"
+            type="text"
+            name="name"
+            autoComplete="name"
+            placeholder="Jan Novák"
+            required
+          />
+        </div>
+        <div>
+          <label className="field-label" htmlFor="cf-email">
+            Email
+          </label>
+          <input
+            id="cf-email"
+            className="form-field"
+            type="email"
+            name="email"
+            autoComplete="email"
+            placeholder="jan@example.com"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="field-label" htmlFor="cf-message">
+          Message
+        </label>
+        <textarea
+          id="cf-message"
           className="form-field"
-          type="text"
-          name="name"
-          placeholder="Your name"
-          required
-        />
-        <input
-          className="form-field"
-          type="email"
-          name="email"
-          placeholder="Your email"
+          name="message"
+          placeholder="What are you working on?"
           required
         />
       </div>
-      <textarea
-        className="form-field"
-        name="message"
-        placeholder="Your message"
-        required
-      />
-      <div className="flex items-center gap-4">
+
+      <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
           className="btn btn--primary"
           disabled={status === "sending"}
         >
           {status === "sending" ? "Sending…" : "Send message"}
+          {status !== "sending" && <IconArrow width={15} height={15} />}
         </button>
-        {status === "sent" && (
-          <span className="text-sm text-accent">Message sent, thanks!</span>
-        )}
-        {status === "error" && (
-          <span className="text-sm text-red-400">
-            Something went wrong. Try again or use email.
-          </span>
-        )}
+
+        <p aria-live="polite" className="mono text-[0.75rem]">
+          {status === "sent" && (
+            <span className="text-emerald-400">
+              Sent — you&apos;ll get a confirmation by email.
+            </span>
+          )}
+          {status === "error" && (
+            <span className="text-red-400">
+              Didn&apos;t go through. Email me directly instead.
+            </span>
+          )}
+        </p>
       </div>
     </form>
   );

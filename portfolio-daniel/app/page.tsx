@@ -1,21 +1,32 @@
-import SideNav from "./components/SideNav";
+import TopNav from "./components/TopNav";
 import Hero from "./components/Hero";
-import Cards from "./components/Cards";
+import Stack from "./components/Stack";
 import Projects from "./components/Projects";
-import About from "./components/About";
+import Awards from "./components/Awards";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <div style={{ color: "var(--text-primary)", minHeight: "100vh" }}>
-      <SideNav />
-      <Hero />
-      <Cards />
-      <Projects />
-      <About />
-      <Contact />
+    <>
+      <TopNav />
+      <main>
+        <Hero />
+        <Stack />
+        <div className="shell">
+          <hr className="rule" />
+        </div>
+        <Projects />
+        <div className="shell">
+          <hr className="rule" />
+        </div>
+        <Awards />
+        <div className="shell">
+          <hr className="rule" />
+        </div>
+        <Contact />
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }

@@ -150,7 +150,16 @@ export default function Background({
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: -1 }}
+      // texture only: the radial mask empties the middle of the viewport where
+      // copy lives, so the automaton reads as atmosphere in the margins
+      style={{
+        zIndex: -1,
+        opacity: 0.45,
+        maskImage:
+          "radial-gradient(115% 85% at 50% 45%, transparent 0%, rgba(0,0,0,0.35) 42%, #000 78%)",
+        WebkitMaskImage:
+          "radial-gradient(115% 85% at 50% 45%, transparent 0%, rgba(0,0,0,0.35) 42%, #000 78%)",
+      }}
     />
   )
 }

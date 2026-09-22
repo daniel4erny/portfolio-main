@@ -1,115 +1,134 @@
 import Reveal from "./Reveal";
+import { projects, type Project } from "@/lib/content";
+import { IconArrow, IconGitHub, IconGlobe } from "./Icons";
 
-type Project = {
-  index: string;
-  title: string;
-  description: string;
-  tech: string[];
-  href: string;
-  featured?: boolean;
-};
-
-const PROJECTS: Project[] = [
-  {
-    index: "01",
-    title: "Project Alpha",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-    tech: ["Next.js", "TypeScript", "PostgreSQL"],
-    href: "#",
-    featured: true,
-  },
-  {
-    index: "02",
-    title: "Project Beta",
-    description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    tech: ["Python", "FastAPI"],
-    href: "#",
-  },
-  {
-    index: "03",
-    title: "Project Gamma",
-    description:
-      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    tech: ["Rust", "WebAssembly"],
-    href: "#",
-  },
-  {
-    index: "04",
-    title: "Project Delta",
-    description:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-    tech: ["Nmap", "Burp Suite", "Bash"],
-    href: "#",
-  },
-  {
-    index: "05",
-    title: "Project Epsilon",
-    description:
-      "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.",
-    tech: ["React", "Node.js"],
-    href: "#",
-  },
-];
-
-function ProjectCard({ project, delay }: { project: Project; delay: number }) {
+function Head({ project }: { project: Project }) {
   return (
-    <Reveal
-      delay={delay}
-      className={project.featured ? "md:col-span-2" : ""}
-    >
-      <a href={project.href} className="project-card group">
-        <div className="flex items-start justify-between mb-6">
-          <span className="font-mono text-[0.7rem] tracking-[0.2em] text-white/25">
+    <>
+      <header className="mb-5 flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <span className="mono text-[0.7rem] tracking-[0.2em] text-text-muted">
             {project.index}
           </span>
-          <span className="project-arrow" aria-hidden>
-            ↗
-          </span>
+          {project.status && <span className="tag">{project.status}</span>}
         </div>
+        <span className="project-arrow" aria-hidden>
+          <IconArrow width={18} height={18} />
+        </span>
+      </header>
 
-        <h3 className="text-[clamp(1.3rem,2vw,1.7rem)] font-bold tracking-[-0.025em] text-text-primary mb-3 leading-[1.15]">
+      <h3 className="text-[clamp(1.4rem,2.4vw,2.1rem)] font-bold leading-[1.1] tracking-[-0.03em] text-text-primary">
+        {/* stretched link turns the whole card into the hit-area for the primary URL */}
+        <a
+          href={project.primary}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="stretch-link"
+        >
           {project.title}
-        </h3>
+        </a>
+      </h3>
 
-        <p className="text-[0.88rem] leading-[1.75] text-slate-400/85 mb-7 max-w-[52ch]">
-          {project.description}
+      <p className="mono mt-2 text-[0.73rem] tracking-[0.04em] text-text-muted">
+        {project.kicker}
+      </p>
+    </>
+  );
+}
+
+function Links({ project }: { project: Project }) {
+  return (
+    <div className="flex flex-wrap gap-x-5 gap-y-2">
+      {project.links.map((l) => (
+        <a
+          key={l.href}
+          href={l.href}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="meta-link"
+        >
+          {l.kind === "code" ? <IconGitHub /> : <IconGlobe />}
+          {l.label}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function Tech({ project }: { project: Project }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {project.tech.map((t) => (
+        <span key={t} className="chip">
+          {t}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ProjectCard({ project, delay }: { project: Project; delay: number }) {
+  if (project.featured) {
+    return (
+      <Reveal delay={delay} className="md:col-span-2">
+        <article className="panel project-card md:!flex-row md:gap-12 md:p-10">
+          {/* headline column stays narrow so the body copy keeps a readable measure */}
+          <div className="md:w-[34%] md:shrink-0">
+            <Head project={project} />
+            <div className="mt-6 hidden md:block">
+              <Links project={project} />
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-1 flex-col md:mt-0">
+            <p className="mb-7 text-[0.92rem] leading-[1.85] text-text-secondary">
+              {project.body}
+            </p>
+            <div className="mt-auto flex flex-col gap-5">
+              <Tech project={project} />
+              <div className="md:hidden">
+                <Links project={project} />
+              </div>
+            </div>
+          </div>
+        </article>
+      </Reveal>
+    );
+  }
+
+  return (
+    <Reveal delay={delay}>
+      <article className="panel project-card">
+        <Head project={project} />
+        <p className="mb-7 mt-5 text-[0.88rem] leading-[1.8] text-text-secondary">
+          {project.body}
         </p>
-
-        <div className="flex gap-2 flex-wrap mt-auto">
-          {project.tech.map((t) => (
-            <span key={t} className="chip">
-              {t}
-            </span>
-          ))}
+        <div className="mt-auto flex flex-col gap-5">
+          <Tech project={project} />
+          <Links project={project} />
         </div>
-      </a>
+      </article>
     </Reveal>
   );
 }
 
 export default function Projects() {
   return (
-    <section id="projects" className="px-[16vw] pb-[14vh]">
+    <section id="projects" className="section shell">
       <Reveal>
-        <p className="text-[0.72rem] font-semibold tracking-[0.24em] text-accent uppercase mb-3">
-          Selected Work
-        </p>
+        <p className="eyebrow mb-5">Selected work</p>
       </Reveal>
 
-      <Reveal delay={0.08}>
-        <h2 className="text-[clamp(1.6rem,3vw,2.6rem)] font-bold tracking-[-0.03em] text-text-primary mb-12 leading-[1.1]">
-          Lorem ipsum projects.{" "}
-          <span className="text-text-secondary font-normal">
-            Dolor sit amet.
-          </span>
+      <Reveal delay={0.06}>
+        <h2 className="h2 max-w-[26ch]">
+          Four things I built.{" "}
+          <span className="muted">Two are live, all four are real.</span>
         </h2>
       </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {PROJECTS.map((p, i) => (
-          <ProjectCard key={p.title} project={p} delay={0.06 * (i % 3)} />
+      <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {projects.map((p, i) => (
+          <ProjectCard key={p.title} project={p} delay={0.05 + (i % 2) * 0.07} />
         ))}
       </div>
     </section>

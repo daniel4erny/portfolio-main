@@ -1,42 +1,68 @@
+import HeroField from "./HeroField";
+import { profile } from "@/lib/content";
+import { IconArrow, IconGitHub } from "./Icons";
+
 export default function Hero() {
   return (
-    <section
-      id="hero"
-      className="flex min-h-screen items-start px-[16vw] pt-[8vh]"
-    >
-      <div className="pt-[8vh]">
-        <p className="fade-up [animation-delay:0.1s] mb-[1.8rem] text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-accent">
+    <section id="hero" className="hero">
+      <div className="hero-scrim" />
+      <HeroField />
+
+      <div className="hero-content shell">
+        <p className="eyebrow fade-up [animation-delay:0.15s] mb-7">
           Portfolio — 2026
         </p>
 
-        <h1 className="fade-up [animation-delay:0.25s] mb-[0.2rem] text-[clamp(2rem,4.5vw,4.5rem)] font-bold leading-[1.08] tracking-[-0.03em] text-text-primary">
-          Software developer and
+        <h1 className="fade-up [animation-delay:0.3s] text-[clamp(2.1rem,6.2vw,4.6rem)] font-bold leading-[1.04] tracking-[-0.04em] text-text-primary">
+          {profile.role[0]}
           <br />
-          cybersecurity engineer
+          {profile.role[1]}
         </h1>
 
-        <span className="fade-up [animation-delay:0.4s] mb-[2.4rem] block text-[clamp(2rem,4.5vw,4.5rem)] font-bold leading-[1.08] tracking-[-0.03em] text-accent">
-          Daniel Černý
-        </span>
-
-        <p className="fade-up [animation-delay:0.55s] mb-[2.8rem] max-w-[44ch] text-[clamp(1rem,1.4vw,1.25rem)] font-normal leading-[1.7] text-text-secondary">
-          Building secure, high-performance software — from full-stack
-          web apps to network infrastructure and penetration testing.
-          <br />
-          <span className="text-[0.82em] text-text-primary opacity-[0.45]">
-            Prague, CZ
-          </span>
+        <p className="fade-up [animation-delay:0.42s] mt-1 text-[clamp(2.1rem,6.2vw,4.6rem)] font-bold leading-[1.04] tracking-[-0.04em] bg-gradient-to-r from-accent via-accent to-accent-2 bg-clip-text text-transparent">
+          {profile.name}
         </p>
 
-        <div className="fade-up [animation-delay:0.7s] flex flex-wrap gap-5">
+        <p className="lede fade-up [animation-delay:0.55s] mt-8 max-w-[46ch] text-[clamp(0.98rem,1.3vw,1.12rem)]">
+          Next.js and TypeScript on the front, Python/FastAPI and Go on the
+          back, Linux everywhere in between. I build things that are fast
+          because of how they&apos;re put together, not because of what&apos;s
+          bolted on afterwards.
+        </p>
+
+        <div className="fade-up [animation-delay:0.68s] mt-10 flex flex-wrap gap-4">
           <a href="#projects" className="btn btn--primary">
-            Projects
+            See the work
+            <IconArrow width={15} height={15} />
           </a>
           <a href="#contact" className="btn btn--secondary">
-            Contact
+            Get in touch
+          </a>
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="btn btn--ghost"
+          >
+            <IconGitHub />
+            GitHub
+          </a>
+        </div>
+
+        <div className="status-bar fade-up [animation-delay:0.82s] mt-12">
+          <span className="flex items-center gap-2">
+            <span className="live-dot" />
+            {profile.available}
+          </span>
+          <span className="hidden sm:inline opacity-40">/</span>
+          <span>{profile.location}</span>
+          <span className="hidden sm:inline opacity-40">/</span>
+          <a href={profile.github} target="_blank" rel="noreferrer noopener">
+            github.com/{profile.githubHandle}
           </a>
         </div>
       </div>
+
     </section>
   );
 }

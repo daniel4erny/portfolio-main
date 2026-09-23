@@ -1,4 +1,4 @@
-import HeroField from "./HeroField";
+import HeroScene from "./HeroScene";
 import { profile } from "@/lib/content";
 import { IconArrow, IconGitHub } from "./Icons";
 
@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section id="hero" className="hero">
       <div className="hero-scrim" />
-      <HeroField />
+      <HeroScene />
 
       <div className="hero-content shell">
         <p className="eyebrow fade-up [animation-delay:0.15s] mb-7">
@@ -19,7 +19,7 @@ export default function Hero() {
           {profile.role[1]}
         </h1>
 
-        <p className="fade-up [animation-delay:0.42s] mt-1 text-[clamp(2.1rem,6.2vw,4.6rem)] font-bold leading-[1.04] tracking-[-0.04em] bg-gradient-to-r from-accent via-accent to-accent-2 bg-clip-text text-transparent">
+        <p className="fade-up [animation-delay:0.42s] mt-1 text-[clamp(2.1rem,6.2vw,4.6rem)] font-bold leading-[1.04] tracking-[-0.04em] text-accent">
           {profile.name}
         </p>
 
@@ -50,10 +50,7 @@ export default function Hero() {
         </div>
 
         <div className="status-bar fade-up [animation-delay:0.82s] mt-12">
-          <span className="flex items-center gap-2">
-            <span className="live-dot" />
-            {profile.available}
-          </span>
+          <span>{profile.available}</span>
           <span className="hidden sm:inline opacity-40">/</span>
           <span>{profile.location}</span>
           <span className="hidden sm:inline opacity-40">/</span>

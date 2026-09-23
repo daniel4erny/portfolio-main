@@ -43,7 +43,6 @@ export default function Contact() {
                 github.com/{profile.githubHandle}
               </a>
               <span className="social-link pointer-events-none">
-                <span className="live-dot" />
                 {profile.location} — {profile.available.toLowerCase()}
               </span>
             </div>

@@ -1,6 +1,6 @@
 import Reveal from "./Reveal";
 import GlassCard from "./GlassCard";
-import { profile, projects, type Project } from "@/lib/content";
+import { projects, type Project } from "@/lib/content";
 import { IconArrow, IconGitHub, IconGlobe } from "./Icons";
 
 function ProjectCard({ project, delay }: { project: Project; delay: number }) {
@@ -95,29 +95,6 @@ export default function Projects() {
         {projects.map((p, i) => (
           <ProjectCard key={p.title} project={p} delay={0.04 + (i % 3) * 0.06} />
         ))}
-
-        {/* closes the grid rather than leaving a hole, and earns its place */}
-        <Reveal delay={0.16} className="project-slot">
-          <GlassCard className="h-full">
-            <a
-              href={profile.github}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="project-more"
-            >
-              <IconGitHub width={20} height={20} />
-              <span className="text-[1.05rem] font-semibold tracking-[-0.02em]">
-                Everything else
-              </span>
-              <span className="mono flex items-center gap-2 text-[0.72rem] text-text-muted">
-                github.com/{profile.githubHandle}
-                <span className="project-arrow">
-                  <IconArrow width={12} height={12} />
-                </span>
-              </span>
-            </a>
-          </GlassCard>
-        </Reveal>
       </div>
     </section>
   );

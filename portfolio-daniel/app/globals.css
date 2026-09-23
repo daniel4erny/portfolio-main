@@ -298,7 +298,8 @@ body {
   transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));
   transform-style: preserve-3d;
   border-color: rgba(34, 211, 238, 0.32);
-  background: rgba(15, 22, 33, 0.94);
+  /* solid once open: the card is being read, so nothing behind it shows */
+  background: #0f1621;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.32),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
@@ -376,21 +377,6 @@ body {
   .glass { transform: none; }
 }
 
-/* ── the tile that closes the grid ───────────── */
-.project-more {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
-  gap: 0.9rem;
-  height: 100%;
-  padding: 1.6rem 1.5rem 1.5rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color 0.25s ease;
-}
-.project-more:hover { color: var(--text-primary); }
-
 .stretch-link::after {
   content: "";
   position: absolute;
@@ -402,8 +388,7 @@ body {
   color: var(--text-muted);
   transition: color 0.3s ease, transform 0.3s var(--ease-out);
 }
-.project-card:hover .project-arrow,
-.project-more:hover .project-arrow {
+.project-card:hover .project-arrow {
   color: var(--accent);
   transform: translate(3px, -3px);
 }

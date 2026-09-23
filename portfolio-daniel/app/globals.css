@@ -293,8 +293,7 @@ body {
 
 /* the tilt is applied only while hovered — a permanent transform, even an
    identity one, promotes the card to its own layer and softens the type */
-.glass:hover,
-.glass:focus-within {
+.glass:is(:hover, :has(:focus-visible)) {
   transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));
   transform-style: preserve-3d;
   border-color: rgba(34, 211, 238, 0.32);
@@ -321,8 +320,7 @@ body {
   opacity: 0;
   transition: opacity 0.35s ease;
 }
-.glass:hover::before,
-.glass:focus-within::before { opacity: 1; }
+.glass:is(:hover, :has(:focus-visible))::before { opacity: 1; }
 
 /* ── project cards ───────────────────────────── */
 /* The slot holds the row height; the card floats inside it, so expanding on
@@ -331,8 +329,7 @@ body {
   position: relative;
   min-height: 13.75rem;
 }
-.project-slot:hover,
-.project-slot:focus-within { z-index: 10; }
+.project-slot:is(:hover, :has(:focus-visible)) { z-index: 10; }
 
 .project-card {
   position: absolute;
@@ -364,8 +361,7 @@ body {
 }
 .project-reveal > div { overflow: hidden; min-height: 0; }
 
-.project-card:hover .project-reveal,
-.project-card:focus-within .project-reveal {
+.project-card:is(:hover, :has(:focus-visible)) .project-reveal {
   grid-template-rows: 1fr;
   opacity: 1;
 }
@@ -383,7 +379,7 @@ body {
   color: var(--text-muted);
   transition: color 0.3s ease, transform 0.3s var(--ease-out);
 }
-.project-card:hover .project-arrow {
+.project-card:is(:hover, :has(:focus-visible)) .project-arrow {
   color: var(--accent);
   transform: translate(3px, -3px);
 }

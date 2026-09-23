@@ -343,13 +343,16 @@ body {
   padding: 1.6rem 1.5rem 1.5rem;
 }
 
-.project-card > * {
-  position: relative;
-  transition: transform 0.35s var(--ease-out);
+/* lifts content clear of the specular pseudo-element */
+.project-card > * { position: relative; }
+
+/* whole-card hit area, under the detail links but over everything else */
+.project-card .project-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
 }
-/* children ride forward of the glass, so the tilt has real depth */
-.project-card:hover > *,
-.project-card:focus-within > * { transform: translateZ(26px); }
 
 /* collapsed to zero until hover: 0fr → 1fr is the one way to animate to an
    auto height without measuring it in JS */
@@ -357,8 +360,7 @@ body {
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
-  transition: grid-template-rows 0.45s var(--ease-out), opacity 0.3s ease,
-    transform 0.35s var(--ease-out);
+  transition: grid-template-rows 0.45s var(--ease-out), opacity 0.3s ease;
 }
 .project-reveal > div { overflow: hidden; min-height: 0; }
 
@@ -375,13 +377,6 @@ body {
   .project-card { position: static; }
   .project-reveal { grid-template-rows: 1fr; opacity: 1; }
   .glass { transform: none; }
-}
-
-.stretch-link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
 }
 
 .project-arrow {
@@ -427,7 +422,7 @@ body {
 
 .meta-link {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;

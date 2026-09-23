@@ -7,6 +7,16 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
   return (
     <Reveal delay={delay} className="project-slot">
       <GlassCard className="project-card group">
+        {/* covers the card so a click anywhere opens the project; the links in
+            the detail panel sit above it and stay separately clickable */}
+        <a
+          href={project.primary}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="project-hit"
+          aria-label={`${project.title} — ${project.kicker}`}
+        />
+
         <header className="mb-4 flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="mono text-[0.7rem] tracking-[0.2em] text-text-muted">
@@ -20,15 +30,7 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
         </header>
 
         <h3 className="text-[clamp(1.3rem,2vw,1.7rem)] font-bold leading-[1.1] tracking-[-0.03em] text-text-primary">
-          {/* stretched link turns the whole card into the hit-area */}
-          <a
-            href={project.primary}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="stretch-link"
-          >
-            {project.title}
-          </a>
+          {project.title}
         </h3>
 
         <p className="mono mt-2 text-[0.72rem] tracking-[0.03em] text-text-muted">

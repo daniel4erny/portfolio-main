@@ -1,12 +1,9 @@
-import HeroScene from "./HeroScene";
 import { profile } from "@/lib/content";
 import { IconArrow, IconGitHub } from "./Icons";
 
 export default function Hero() {
   return (
     <section id="hero" className="hero">
-      <div className="hero-scrim" />
-      <HeroScene />
 
       <div className="hero-content shell">
         <p className="eyebrow fade-up [animation-delay:0.15s] mb-7">

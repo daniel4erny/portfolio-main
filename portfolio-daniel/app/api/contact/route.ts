@@ -1,7 +1,9 @@
 import { Resend } from "resend";
+import { profile } from "@/lib/content";
 
 const FROM = "Daniel Černý <portfolio@djt-group.com>";
-const TO_EMAIL = "djt.goddaddy@gmail.com";
+// the same address the site shows, so the two can't drift apart
+const TO_EMAIL = profile.email;
 
 export async function POST(request: Request) {
   let body: { name?: string; email?: string; message?: string };

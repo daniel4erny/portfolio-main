@@ -397,6 +397,215 @@ body {
   opacity: 1;
 }
 
+/* ── certificate deck ────────────────────────── */
+.cert-layout {
+  display: grid;
+  gap: 3.5rem;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .cert-layout { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 4rem; }
+}
+
+.cert-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1.1rem;
+  margin-top: 2rem;
+  color: var(--text-secondary);
+}
+.cert-btn {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.cert-btn:hover {
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(34, 211, 238, 0.08);
+  color: var(--accent);
+}
+
+/* the deck grows up and to the right, so it leaves room on those sides */
+.cert-deck {
+  position: relative;
+  height: clamp(17rem, 52vw, 22rem);
+  padding-top: 3rem;
+  perspective: 1500px;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  outline-offset: 8px;
+}
+.cert-deck:active { cursor: grabbing; }
+
+.cert-card {
+  --i: 0;
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 0%;
+  --drag: 0px;
+  --c1: #22d3ee;
+  --c2: #6d5dfc;
+
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  width: min(calc(100% - 5rem), 28rem);
+  aspect-ratio: 1.6;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.6rem 1.35rem;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background:
+    radial-gradient(90% 80% at 100% 100%, color-mix(in srgb, var(--c1) 30%, transparent), transparent 62%),
+    radial-gradient(70% 70% at 0% 0%, color-mix(in srgb, var(--c2) 22%, transparent), transparent 60%),
+    linear-gradient(160deg, #111826, #0a0f17);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 30px 60px -28px rgba(0, 0, 0, 0.95);
+  z-index: calc(10 - var(--i));
+  transform-origin: 50% 100%;
+  /* deeper cards step up, right and back, and turn slightly away */
+  transform:
+    translateX(var(--drag))
+    translate3d(calc(var(--i) * 2.2rem), calc(var(--i) * -1.1rem), calc(var(--i) * -90px))
+    rotateY(calc(var(--i) * -9deg))
+    rotateZ(calc(var(--i) * 2.5deg))
+    rotateX(var(--rx))
+    rotateY(var(--ry));
+  filter: brightness(calc(1 - var(--i) * 0.22)) saturate(calc(1 - var(--i) * 0.2));
+  transition:
+    transform 0.6s var(--ease-out),
+    filter 0.6s ease,
+    box-shadow 0.4s ease;
+}
+.cert-card[data-lang="python"] { --c1: #ffd43b; --c2: #3776ab; }
+.cert-card[data-lang="java"]   { --c1: #f89820; --c2: #5382a1; }
+
+/* following the pointer and the finger has to be immediate */
+.cert-card[data-dragging] { transition: filter 0.6s ease; }
+
+/* shuffled away: out to the side first, and only then to the back */
+.cert-card[data-leaving] {
+  transform: translate3d(-118%, 1.5rem, 60px) rotateZ(-14deg) rotateY(22deg);
+  transition: transform 0.38s cubic-bezier(0.5, 0, 0.75, 0.3);
+}
+
+/* holographic foil: a band of light that slides with the cursor */
+.cert-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      115deg,
+      transparent calc(var(--mx) - 28%),
+      rgba(120, 220, 255, 0.1) calc(var(--mx) - 10%),
+      rgba(255, 255, 255, 0.16) var(--mx),
+      rgba(200, 150, 255, 0.1) calc(var(--mx) + 10%),
+      transparent calc(var(--mx) + 28%)
+    );
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+}
+.cert-card[data-top]:hover::after { opacity: 1; }
+
+.cert-card > :not(.cert-logo) { position: relative; z-index: 1; }
+
+/* the language mark, oversized and cropped by the card edge */
+.cert-logo {
+  position: absolute;
+  right: -5%;
+  bottom: -12%;
+  width: 44%;
+  height: auto;
+  opacity: 0.9;
+  filter: drop-shadow(0 12px 30px color-mix(in srgb, var(--c1) 35%, transparent));
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+.cert-issuer {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.cert-title { margin-top: auto; max-width: 64%; }
+.cert-title h3 {
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+.cert-title p {
+  margin-top: 0.4rem;
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+}
+
+.cert-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1.1rem;
+}
+.cert-credits {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0a0f17;
+  background: var(--c1);
+}
+.cert-code { font-size: 0.8rem; color: var(--text-muted); }
+.cert-verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 15, 23, 0.55);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.cert-verify:hover { border-color: var(--c1); color: var(--c1); }
+
+@media (max-width: 520px) {
+  .cert-card { width: calc(100% - 3rem); padding: 1.1rem 1.15rem 1rem; }
+  .cert-card { transform:
+    translateX(var(--drag))
+    translate3d(calc(var(--i) * 1.3rem), calc(var(--i) * -0.8rem), calc(var(--i) * -70px))
+    rotateY(calc(var(--i) * -8deg))
+    rotateZ(calc(var(--i) * 2deg)); }
+  .cert-code { display: none; }
+  .cert-title { max-width: 78%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cert-card, .cert-card[data-leaving] { transition: none; }
+}
+
 /* no hover to give: nothing hides, and the cards go back into the flow */
 @media (hover: none) {
   .hover-hint { display: none; }

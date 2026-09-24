@@ -211,6 +211,49 @@ export const awards: Award[] = [
   },
 ];
 
+export type Certificate = {
+  course: string;
+  series: string;
+  issuer: string;
+  credits: string;
+  /** picks the card's logo and colours */
+  lang: "python" | "java";
+  /** the issuer's validation code, also the last segment of href */
+  code: string;
+  href: string;
+};
+
+/** Each href is the issuer's own validation page, which serves the certificate. */
+export const certificates: Certificate[] = [
+  {
+    course: "Advanced Course in Programming",
+    series: "Python Programming MOOC",
+    issuer: "University of Helsinki",
+    credits: "5 ECTS",
+    lang: "python",
+    code: "hqr25qn2tut",
+    href: "https://certificates.mooc.fi/validate/hqr25qn2tut",
+  },
+  {
+    course: "Java Programming I",
+    series: "Java Programming MOOC",
+    issuer: "University of Helsinki",
+    credits: "5 ECTS",
+    lang: "java",
+    code: "wpwwtiu5jv",
+    href: "https://certificates.mooc.fi/validate/wpwwtiu5jv",
+  },
+  {
+    course: "Introduction to Programming",
+    series: "Python Programming MOOC",
+    issuer: "University of Helsinki",
+    credits: "5 ECTS",
+    lang: "python",
+    code: "a3wwfcmf03f",
+    href: "https://certificates.mooc.fi/validate/a3wwfcmf03f",
+  },
+];
+
 /** The brand mark handles "back to top", so the hero needs no link of its own. */
 export const nav = [
   { label: "stack", href: "#stack" },

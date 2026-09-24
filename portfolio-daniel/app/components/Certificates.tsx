@@ -1,20 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { certificates, type Certificate } from "@/lib/content";
 import { IconArrow } from "./Icons";
 
 /**
- * The certificates as a deck of 3D cards. Clicking the top card, the arrow
- * buttons, the arrow keys or a horizontal swipe shuffles it: the card flies
- * out to the side, and only once it is clear of the deck does it drop to the
- * back, so it never passes through the cards in front of it.
+ * The certificates as a fan of 3D cards, centred on the page. The active card
+ * stands at the front; the others spread out to either side, turned and set
+ * back in depth. Clicking a side card, the arrow buttons, the arrow keys or a
+ * swipe brings another card to the front. The whole fan leans a little
+ * toward the pointer, which also drives the foil highlight.
  */
 
-const FLY_MS = 380;
-const SWIPE_PX = 70;
-const MAX_TILT = 7;
+const SWIPE_PX = 60;
+const MAX_TILT = 6; // degrees
 
 /* the Python mark's path, split into its two snakes so each gets its colour */
 const PY_TOP = "M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09z";
@@ -44,24 +44,23 @@ function JavaMark() {
 
 function Card({
   cert,
-  depth,
-  leaving,
-  cardRef,
+  offset,
+  onSelect,
 }: {
   cert: Certificate;
-  depth: number;
-  leaving: boolean;
-  cardRef?: React.Ref<HTMLElement>;
+  /** position relative to the active card: 0 is front, ±1 either side */
+  offset: number;
+  onSelect: () => void;
 }) {
+  const active = offset === 0;
   return (
     <article
-      ref={cardRef}
       className="cert-card"
       data-lang={cert.lang}
-      data-top={depth === 0 || undefined}
-      data-leaving={leaving || undefined}
-      style={{ "--i": depth } as React.CSSProperties}
-      aria-hidden={depth !== 0}
+      data-active={active || undefined}
+      style={{ "--o": offset, "--d": Math.abs(offset) } as React.CSSProperties}
+      aria-hidden={!active}
+      onClick={active ? undefined : onSelect}
     >
       {cert.lang === "python" ? <PythonMark /> : <JavaMark />}
 
@@ -79,9 +78,7 @@ function Card({
           target="_blank"
           rel="noreferrer noopener"
           className="cert-verify mono"
-          tabIndex={depth === 0 ? 0 : -1}
-          // the link opens the certificate; it must not also shuffle the deck
-          onClick={(e) => e.stopPropagation()}
+          tabIndex={active ? 0 : -1}
           onPointerDown={(e) => e.stopPropagation()}
         >
           verify
@@ -93,152 +90,135 @@ function Card({
 }
 
 export default function Certificates() {
-  const [order, setOrder] = useState(() => certificates.map((_, i) => i));
-  const [leaving, setLeaving] = useState<number | null>(null);
-  const topRef = useRef<HTMLElement>(null);
-  const drag = useRef<{ x: number; dx: number; id: number } | null>(null);
-  const busy = useRef(false);
+  const count = certificates.length;
+  // start on the middle card so the fan opens symmetrically
+  const [active, setActive] = useState(Math.floor(count / 2));
+  const stageRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ x: number; dx: number } | null>(null);
+  const swiped = useRef(false);
 
-  function next() {
-    if (busy.current) return;
-    busy.current = true;
-    setLeaving(order[0]);
-    window.setTimeout(() => {
-      setOrder((o) => [...o.slice(1), o[0]]);
-      setLeaving(null);
-      busy.current = false;
-    }, FLY_MS);
-  }
+  const go = (i: number) => setActive(((i % count) + count) % count);
 
-  function prev() {
-    if (busy.current) return;
-    setOrder((o) => [o[o.length - 1], ...o.slice(0, -1)]);
-  }
-
-  // top-card tilt and sheen, written straight to the style object
   function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    const el = topRef.current;
+    if (drag.current) drag.current.dx = e.clientX - drag.current.x;
+    if (e.pointerType !== "mouse") return;
+    const el = stageRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
     const y = (e.clientY - r.top) / r.height;
-
-    if (drag.current && drag.current.id === e.pointerId) {
-      drag.current.dx = e.clientX - drag.current.x;
-      el.style.setProperty("--drag", `${drag.current.dx}px`);
-    }
-    if (e.pointerType !== "mouse") return;
     el.style.setProperty("--mx", `${(x * 100).toFixed(1)}%`);
-    el.style.setProperty("--my", `${(y * 100).toFixed(1)}%`);
-    el.style.setProperty("--ry", `${((x - 0.5) * 2 * MAX_TILT).toFixed(2)}deg`);
-    el.style.setProperty("--rx", `${((0.5 - y) * 2 * MAX_TILT).toFixed(2)}deg`);
+    el.style.setProperty("--sy", `${((x - 0.5) * 2 * MAX_TILT).toFixed(2)}deg`);
+    el.style.setProperty("--sx", `${((0.5 - y) * 2 * MAX_TILT * 0.6).toFixed(2)}deg`);
   }
 
   function resetTilt() {
-    const el = topRef.current;
+    const el = stageRef.current;
     if (!el) return;
-    for (const [k, v] of [["--rx", "0deg"], ["--ry", "0deg"], ["--mx", "50%"], ["--my", "0%"]]) {
-      el.style.setProperty(k, v);
+    el.style.setProperty("--sx", "0deg");
+    el.style.setProperty("--sy", "0deg");
+    el.style.setProperty("--mx", "50%");
+  }
+
+  function onPointerUp() {
+    const d = drag.current;
+    drag.current = null;
+    swiped.current = false;
+    if (!d) return;
+    if (d.dx < -SWIPE_PX) {
+      go(active + 1);
+      swiped.current = true;
+    } else if (d.dx > SWIPE_PX) {
+      go(active - 1);
+      swiped.current = true;
     }
   }
 
-  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    drag.current = { x: e.clientX, dx: 0, id: e.pointerId };
-    // keep receiving moves while the drag leaves the deck
-    e.currentTarget.setPointerCapture(e.pointerId);
-    topRef.current?.setAttribute("data-dragging", "");
-  }
-
-  function endDrag() {
-    const d = drag.current;
-    drag.current = null;
-    const el = topRef.current;
-    el?.removeAttribute("data-dragging");
-    el?.style.setProperty("--drag", "0px");
-    if (!d) return;
-    // barely moved = a click; a swipe left shuffles forward, a swipe right
-    // brings the previous card back; anything in between just snaps back
-    if (d.dx > SWIPE_PX) prev();
-    else if (d.dx < -SWIPE_PX || Math.abs(d.dx) < 6) next();
-  }
-
-  // the tilt belongs to whichever card is on top; clear it when that changes
-  useEffect(resetTilt, [order]);
-
   return (
     <section id="certificates" className="section shell">
-      <div className="cert-layout">
-        <div>
-          <Reveal>
-            <p className="eyebrow mb-5">Courses</p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="h2">Certificates</h2>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="lede mt-6 max-w-[38ch]">
-              Three University of Helsinki MOOCs, two in Python and one in
-              Java. Each card links to the certificate on the issuer&apos;s
-              own site.
-            </p>
-          </Reveal>
-          <Reveal delay={0.18}>
-            <div className="cert-controls">
-              <button type="button" className="cert-btn" onClick={prev} aria-label="Previous certificate">
-                <IconArrow width={16} height={16} style={{ transform: "rotate(-135deg)" }} />
-              </button>
-              <span className="mono" aria-live="polite">
-                {order[0] + 1} / {certificates.length}
-              </span>
-              <button type="button" className="cert-btn" onClick={next} aria-label="Next certificate">
-                <IconArrow width={16} height={16} style={{ transform: "rotate(45deg)" }} />
-              </button>
-              <span className="hover-hint mono text-[0.9rem] text-text-muted">
-                click or drag the card
-              </span>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.1}>
-          <div
-            className="cert-deck"
-            role="group"
-            aria-roledescription="carousel"
-            aria-label="Certificates"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              // keys pressed on the verify link are the link's own business
-              if (e.target !== e.currentTarget) return;
-              if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                next();
-              } else if (e.key === "ArrowLeft") {
-                e.preventDefault();
-                prev();
-              }
-            }}
-            onPointerMove={onPointerMove}
-            onPointerLeave={resetTilt}
-            onPointerDown={onPointerDown}
-            onPointerUp={endDrag}
-            onPointerCancel={() => {
-              drag.current = null;
-              topRef.current?.removeAttribute("data-dragging");
-              topRef.current?.style.setProperty("--drag", "0px");
-            }}
-          >
-            {order.map((certIndex, depth) => (
-              <Card
-                key={certificates[certIndex].code}
-                cert={certificates[certIndex]}
-                depth={depth}
-                leaving={leaving === certIndex}
-                cardRef={depth === 0 ? topRef : undefined}
-              />
-            ))}
-          </div>
+      <div className="cert-intro">
+        <Reveal>
+          <p className="eyebrow mb-5">Courses</p>
         </Reveal>
+        <Reveal delay={0.06}>
+          <h2 className="h2">Certificates</h2>
+        </Reveal>
+        <Reveal delay={0.12}>
+          <p className="lede mt-6 max-w-[44ch]">
+            Three University of Helsinki MOOCs, two in Python and one in Java.
+            Each card links to the certificate on the issuer&apos;s own site.
+          </p>
+        </Reveal>
+      </div>
+
+      <Reveal delay={0.1}>
+        <div
+          className="cert-scene"
+          role="group"
+          aria-roledescription="carousel"
+          aria-label="Certificates"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            // keys pressed on the verify link are the link's own business
+            if (e.target !== e.currentTarget) return;
+            if (e.key === "ArrowRight") {
+              e.preventDefault();
+              go(active + 1);
+            } else if (e.key === "ArrowLeft") {
+              e.preventDefault();
+              go(active - 1);
+            }
+          }}
+          onPointerDown={(e) => {
+            drag.current = { x: e.clientX, dx: 0 };
+          }}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={() => (drag.current = null)}
+          onPointerLeave={() => {
+            resetTilt();
+            drag.current = null;
+          }}
+          // a swipe that ends on a side card must not also select it
+          onClickCapture={(e) => {
+            if (swiped.current) {
+              e.stopPropagation();
+              swiped.current = false;
+            }
+          }}
+        >
+          <div ref={stageRef} className="cert-stage">
+            {certificates.map((cert, i) => {
+              // wrap so every card sits within ±half the deck of the active one
+              let offset = i - active;
+              if (offset > count / 2) offset -= count;
+              if (offset < -count / 2) offset += count;
+              return <Card key={cert.code} cert={cert} offset={offset} onSelect={() => go(i)} />;
+            })}
+          </div>
+        </div>
+      </Reveal>
+
+      <div className="cert-controls">
+        <button type="button" className="cert-btn" onClick={() => go(active - 1)} aria-label="Previous certificate">
+          <IconArrow width={16} height={16} style={{ transform: "rotate(-135deg)" }} />
+        </button>
+        <div className="cert-dots" aria-live="polite">
+          {certificates.map((c, i) => (
+            <button
+              key={c.code}
+              type="button"
+              className="cert-dot"
+              data-on={i === active || undefined}
+              aria-label={c.course}
+              aria-current={i === active || undefined}
+              onClick={() => go(i)}
+            />
+          ))}
+        </div>
+        <button type="button" className="cert-btn" onClick={() => go(active + 1)} aria-label="Next certificate">
+          <IconArrow width={16} height={16} style={{ transform: "rotate(45deg)" }} />
+        </button>
       </div>
     </section>
   );

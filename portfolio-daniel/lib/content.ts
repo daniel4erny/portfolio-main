@@ -5,12 +5,12 @@
 
 export const profile = {
   name: "Daniel Černý",
-  role: ["Software developer", "& cybersecurity engineer"],
+  role: "Software developer & cybersecurity",
   location: "Prague, CZ",
   email: "daniel@djt-group.com",
   github: "https://github.com/daniel4erny",
   githubHandle: "daniel4erny",
-  available: "Open to internships & freelance",
+  available: "Open to internships and freelance work",
 } as const;
 
 export type StackIcon =
@@ -25,6 +25,8 @@ export type StackItem = {
   icon: StackIcon;
   name: string;
   kicker: string;
+  /** brand colour the mark lights up in on hover */
+  color: string;
   body: string;
   chips: string[];
 };
@@ -33,43 +35,49 @@ export const stack: StackItem[] = [
   {
     icon: "next",
     name: "Next.js",
-    kicker: "Front of house",
-    body: "App Router, server components and route handlers. It's what this site runs on and what forchan's whole front end is built from.",
+    kicker: "Front end",
+    color: "#ffffff",
+    body: "App Router, server components and route handlers. This site runs on it, and so does the forchan front end.",
     chips: ["App Router", "React 19", "Vercel"],
   },
   {
     icon: "ts",
     name: "TypeScript / JS",
-    kicker: "The default",
-    body: "Strict mode end to end. Types are where I put the design decisions that comments would otherwise have to carry.",
+    kicker: "Default language",
+    color: "#3178c6",
+    body: "Strict mode everywhere. If a type can describe it, I'd rather write the type than the comment.",
     chips: ["strict", "ESLint", "Tailwind"],
   },
   {
     icon: "python",
     name: "Python",
-    kicker: "Glue & tooling",
-    body: "Automation, data wrangling and the scripts I write during cyber competitions — the language I reach for when the problem is still fuzzy.",
+    kicker: "Scripts & tooling",
+    color: "#ffd43b",
+    body: "Automation, data processing and most of what I write during cybersecurity competitions. It's what I open first when I'm still figuring the problem out.",
     chips: ["asyncio", "Pydantic", "scripting"],
   },
   {
     icon: "fastapi",
     name: "FastAPI",
     kicker: "APIs",
-    body: "Async Python services with typed request models and generated OpenAPI docs. Powers forchan's posting, auth and upload endpoints.",
+    color: "#05998b",
+    body: "Async Python services with Pydantic models and OpenAPI docs for free. forchan's posting, auth and upload endpoints are FastAPI.",
     chips: ["async", "OpenAPI", "Supabase"],
   },
   {
     icon: "go",
     name: "Go",
-    kicker: "Systems",
-    body: "Goroutines and channels for concurrency I can actually reason about, compiled down to a single static binary. Both gowlan and minesweeper-go are pure Go.",
+    kicker: "Servers & CLIs",
+    color: "#00add8",
+    body: "Goroutines and channels make concurrency easy to follow, and the result is one static binary. gowlan and minesweeper-go are both written in Go.",
     chips: ["WebSockets", "TUI", "net/http"],
   },
   {
     icon: "linux",
     name: "Linux",
-    kicker: "Where it all runs",
-    body: "Arch-based daily driver. Shell, systemd, networking and packaging — minesweeper-go ships to the AUR because that's where I'd want to install it from.",
+    kicker: "Daily driver",
+    color: "#fcc624",
+    body: "Arch on my own machine: shell, systemd, networking, Docker. I package my own stuff too, minesweeper-go is on the AUR.",
     chips: ["Arch", "zsh", "Docker"],
   },
 ];
@@ -94,7 +102,7 @@ export const projects: Project[] = [
     title: "TEP",
     kicker: "Training Evaluation Platform",
     status: "Live",
-    body: "An AI-driven training platform where teams rehearse high-stakes moments — a client pitch, a command decision, an emergency call — inside web and VR scenarios built on their own data. AI characters hold up the pressure; afterwards the session is scored on clarity, confidence and decision quality, and the results roll up into team dashboards.",
+    body: "Teams rehearse hard moments here, like a client pitch, a command decision or an emergency call, in web and VR scenarios built from their own data. AI characters play the other side. Every session is scored on clarity, confidence and decision quality, and the scores end up in team dashboards.",
     tech: ["Next.js", "TypeScript", "AI scenarios", "Analytics"],
     primary: "https://tep.training",
     links: [{ label: "tep.training", href: "https://tep.training", kind: "live" }],
@@ -103,9 +111,9 @@ export const projects: Project[] = [
   {
     index: "02",
     title: "forchan",
-    kicker: "Imageboard, from scratch",
+    kicker: "Imageboard",
     status: "Live",
-    body: "A working imageboard clone: boards, threads, replies, image uploads and token-based identity with no accounts to manage. A Next.js App Router front end talks to a FastAPI service mounted at /api/py, with Supabase behind it for Postgres and object storage — the whole thing deployed as one Vercel project.",
+    body: "Boards, threads, replies, image uploads, and token-based identity instead of accounts. The Next.js front end talks to a FastAPI service mounted at /api/py, Supabase handles Postgres and file storage, and all of it deploys as one Vercel project.",
     tech: ["Next.js", "TypeScript", "Python", "FastAPI", "Supabase"],
     primary: "https://forchan.vercel.app",
     links: [
@@ -117,9 +125,9 @@ export const projects: Project[] = [
   {
     index: "03",
     title: "DOOM Museum",
-    kicker: "Built in 24 hours at a hackathon",
+    kicker: "24h hackathon, 3rd place",
     status: "Live",
-    body: "A bilingual museum for the DOOM franchise, built from an empty repo inside the 24 hours of the GJS hackathon — and good for third place. A weapons catalogue and a games timeline you page through, an archive of sound effects, 3D models and artwork, and a /play route that boots DOOM (1993) in the browser on an MS-DOS emulation core, keybindings and all.",
+    body: "A bilingual (EN/CZ) site about the DOOM series, built by our team of three from an empty repo at the GJS hackathon. It has a weapons catalogue, a games timeline, an archive of sounds, 3D models and artwork, and a /play page that runs DOOM (1993) in the browser through DOS emulation.",
     tech: ["Next.js", "TypeScript", "DOS emulation", "EN / CZ"],
     primary: "https://doom.djt-group.com",
     links: [{ label: "doom.djt-group.com", href: "https://doom.djt-group.com", kind: "live" }],
@@ -128,8 +136,8 @@ export const projects: Project[] = [
   {
     index: "04",
     title: "gowlan",
-    kicker: "Live chat over WebSockets",
-    body: "A LAN chat server in pure Go. A hub goroutine owns every connection and fans messages out over channels, so registration, removal and broadcast never touch a mutex; ping/pong keepalives with read deadlines drop dead clients on their own. The client is a Bubble Tea TUI, the server ships as a Docker image.",
+    kicker: "LAN chat over WebSockets",
+    body: "A chat server in Go. One hub goroutine owns every connection and broadcasts over channels, so there isn't a single mutex. Ping/pong with read deadlines drops dead clients. The client is a Bubble Tea TUI and the server ships as a Docker image.",
     tech: ["Go", "WebSockets", "gorilla/websocket", "Bubble Tea", "Docker"],
     primary: "https://github.com/daniel4erny/gowlan",
     links: [{ label: "Source", href: "https://github.com/daniel4erny/gowlan", kind: "code" }],
@@ -138,7 +146,7 @@ export const projects: Project[] = [
     index: "05",
     title: "minesweeper-go",
     kicker: "Minesweeper in the terminal",
-    body: "Minesweeper rebuilt on tcell, entirely keyboard-driven. Beginner, normal and expert presets plus custom boards, flood-fill reveal on empty cells, flagging, win detection and a live timer. Packaged for Arch Linux on the AUR and released into the public domain under the Unlicense.",
+    body: "Keyboard-only Minesweeper on tcell. Three difficulty presets and custom board sizes, flood-fill reveal, flags and a timer. It's on the AUR and released under the Unlicense.",
     tech: ["Go", "tcell", "TUI", "AUR"],
     primary: "https://github.com/daniel4erny/minesweeper-go",
     links: [
@@ -168,7 +176,7 @@ export const awards: Award[] = [
       { place: "7", ordinal: "th", note: "national final" },
     ],
     detail:
-      "Second in the regional round and seventh nationally in the first year of the Czech AI Olympiad — training models on real data and defending the solution in front of a technical jury. It is the national qualifier for the International Olympiad in AI.",
+      "The first year of the Czech AI Olympiad, which qualifies for the International Olympiad in AI. You train models on real data and then defend the solution to a technical jury.",
     links: [{ label: "aiolympiada.cz", href: "https://www.aiolympiada.cz/" }],
   },
   {
@@ -177,7 +185,7 @@ export const awards: Award[] = [
     org: "Gymnázium Jaroslava Seiferta, Prague",
     places: [{ place: "3", ordinal: "rd", note: "of 18 teams" }],
     detail:
-      "24 hours non-stop, 18 three-person teams from across the country, one web app built from nothing and pitched at the end to a jury of engineers from software companies. What came out of ours is DOOM Museum, and it is still up.",
+      "24 hours, 18 teams of three from around the country, and a pitch at the end to a jury of engineers from software companies. Our team built DOOM Museum, and it's still online.",
     links: [
       { label: "doom.djt-group.com", href: "https://doom.djt-group.com" },
       { label: "gymjs.cz", href: "https://www.gymjs.cz/2026/03/14/hackathon-13-14-3/" },
@@ -189,7 +197,7 @@ export const awards: Award[] = [
     org: "AFCEA — national cybersecurity competition",
     places: [{ place: "21", ordinal: "st", note: "overall" }],
     detail:
-      "21st in the overall national ranking of the Czech secondary-school cybersecurity competition, run with the National Cyber and Information Security Agency as expert guarantor.",
+      "The national cybersecurity competition for secondary schools, with NÚKIB as the expert guarantor.",
     links: [{ label: "kybersoutez.cz", href: "https://www.kybersoutez.cz/" }],
   },
   {
@@ -198,7 +206,7 @@ export const awards: Award[] = [
     org: "AFCEA — junior category",
     places: [{ place: "2", ordinal: "nd", note: "junior category" }],
     detail:
-      "Second place nationally in the junior category: cryptography, network forensics, web exploitation and the security theory underneath all three.",
+      "National final, junior category. Tasks covered cryptography, network forensics, web exploitation and security theory.",
     links: [{ label: "kybersoutez.cz", href: "https://www.kybersoutez.cz/" }],
   },
 ];

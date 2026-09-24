@@ -19,7 +19,7 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
 
         <header className="mb-4 flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="mono text-[0.7rem] tracking-[0.2em] text-text-muted">
+            <span className="mono text-[0.94rem] tracking-[0.04em] text-text-muted">
               {project.index}
             </span>
             {project.status && <span className="tag">{project.status}</span>}
@@ -33,14 +33,14 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
           {project.title}
         </h3>
 
-        <p className="mono mt-2 text-[0.72rem] tracking-[0.03em] text-text-muted">
+        <p className="mono mt-2 text-[0.95rem] tracking-[0.03em] text-text-muted">
           {project.kicker}
         </p>
 
         {/* collapsed to nothing until hover; 0fr→1fr animates an auto height */}
         <div className="project-reveal">
           <div>
-            <p className="pt-5 text-[0.87rem] leading-[1.8] text-text-secondary">
+            <p className="pt-5 text-[1.08rem] leading-[1.8] text-text-secondary">
               {project.body}
             </p>
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
@@ -81,13 +81,10 @@ export default function Projects() {
 
       <div className="flex flex-wrap items-end justify-between gap-6">
         <Reveal delay={0.06}>
-          <h2 className="h2 max-w-[26ch]">
-            Five things I built.{" "}
-            <span className="muted">Three are live, all five are real.</span>
-          </h2>
+          <h2 className="h2">Things I&apos;ve built</h2>
         </Reveal>
         <Reveal delay={0.12}>
-          <p className="mono hover-hint text-[0.68rem] tracking-[0.1em] text-text-muted">
+          <p className="mono hover-hint text-[0.92rem] tracking-[0.04em] text-text-muted">
             hover a card for detail
           </p>
         </Reveal>

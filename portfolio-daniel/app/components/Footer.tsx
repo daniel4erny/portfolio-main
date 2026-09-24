@@ -5,11 +5,11 @@ export default function Footer() {
     <footer className="shell">
       <hr className="rule" />
       <div className="flex flex-wrap items-center justify-between gap-4 py-8">
-        <span className="mono text-[0.72rem] text-text-muted">
+        <span className="mono text-[0.95rem] text-text-muted">
           © 2026 {profile.name}
         </span>
-        <span className="mono text-[0.72rem] text-text-muted">
-          Next.js · TypeScript · Three.js — no template, no page builder
+        <span className="mono text-[0.95rem] text-text-muted">
+          Built with Next.js and Three.js
         </span>
       </div>
     </footer>

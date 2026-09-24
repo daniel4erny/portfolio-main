@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const description =
-  "Daniel Černý — software developer and cybersecurity engineer in Prague. Next.js and TypeScript on the front, Python/FastAPI and Go on the back, Linux in between.";
+  "Daniel Černý, developer from Prague. Web apps in Next.js and TypeScript, backends in Python and Go, and cybersecurity competitions.";
 
 export const metadata: Metadata = {
   title: {

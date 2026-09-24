@@ -13,17 +13,13 @@ export default function Contact() {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <h2 className="h2 mb-6 max-w-[20ch]">
-              Got something to build?{" "}
-              <span className="muted">Tell me about it.</span>
-            </h2>
+            <h2 className="h2 mb-6">Get in touch</h2>
           </Reveal>
 
           <Reveal delay={0.12}>
             <p className="lede mb-9 max-w-[42ch]">
-              Internships, freelance work, a project that needs a second pair of
-              hands — or just something you think I&apos;d find interesting.
-              I read everything and reply to all of it.
+              Have an internship, a freelance job or a project you could use
+              help with? Send me a message and I&apos;ll get back to you.
             </p>
           </Reveal>
 
@@ -43,7 +39,7 @@ export default function Contact() {
                 github.com/{profile.githubHandle}
               </a>
               <span className="social-link pointer-events-none">
-                {profile.location} — {profile.available.toLowerCase()}
+                {profile.location} · {profile.available.toLowerCase()}
               </span>
             </div>
           </Reveal>

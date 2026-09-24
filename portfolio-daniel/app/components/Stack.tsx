@@ -26,10 +26,7 @@ export default function Stack() {
       </Reveal>
 
       <Reveal delay={0.06}>
-        <h2 className="h2 max-w-[26ch]">
-          Six things I reach for.{" "}
-          <span className="muted">Every one of them, most weeks.</span>
-        </h2>
+        <h2 className="h2">What I work with</h2>
       </Reveal>
 
       <div className="mt-12 grid gap-px overflow-hidden rounded-[18px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
@@ -37,22 +34,25 @@ export default function Stack() {
           const Icon = ICONS[item.icon];
           return (
             <Reveal key={item.name} delay={0.04 + (i % 3) * 0.06} className="h-full">
-              <article className="stack-cell">
+              <article
+                className="stack-cell"
+                style={{ "--brand": item.color } as React.CSSProperties}
+              >
                 <header className="mb-5 flex items-center gap-3">
                   <span className="stack-icon">
                     <Icon width={19} height={19} />
                   </span>
                   <div>
-                    <h3 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-text-primary">
+                    <h3 className="text-[1.3rem] font-semibold tracking-[-0.02em] text-text-primary">
                       {item.name}
                     </h3>
-                    <p className="mono text-[0.62rem] uppercase tracking-[0.16em] text-text-muted">
+                    <p className="mono text-[0.9rem] uppercase tracking-[0.08em] text-text-muted">
                       {item.kicker}
                     </p>
                   </div>
                 </header>
 
-                <p className="mb-6 text-[0.86rem] leading-[1.75] text-text-secondary">
+                <p className="mb-6 text-[1.08rem] leading-[1.75] text-text-secondary">
                   {item.body}
                 </p>
 

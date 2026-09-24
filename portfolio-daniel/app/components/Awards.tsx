@@ -10,10 +10,7 @@ export default function Awards() {
       </Reveal>
 
       <Reveal delay={0.06}>
-        <h2 className="h2 max-w-[30ch]">
-          Where the work gets measured{" "}
-          <span className="muted">against everyone else&apos;s.</span>
-        </h2>
+        <h2 className="h2">Results</h2>
       </Reveal>
 
       <div className="results">
@@ -23,13 +20,13 @@ export default function Awards() {
               <span className="result-year mono">{a.year}</span>
 
               <div className="result-body">
-                <h3 className="text-[1.08rem] font-semibold tracking-[-0.02em] text-text-primary">
+                <h3 className="text-[1.35rem] font-semibold tracking-[-0.02em] text-text-primary">
                   {a.title}
                 </h3>
-                <p className="mono mt-1 text-[0.7rem] tracking-[0.03em] text-text-muted">
+                <p className="mono mt-1 text-[0.94rem] tracking-[0.03em] text-text-muted">
                   {a.org}
                 </p>
-                <p className="mt-3 max-w-[60ch] text-[0.87rem] leading-[1.8] text-text-secondary">
+                <p className="mt-3 max-w-[60ch] text-[1.08rem] leading-[1.8] text-text-secondary">
                   {a.detail}
                 </p>
 
@@ -53,12 +50,12 @@ export default function Awards() {
 
               <dl className="result-places">
                 {a.places.map((p) => (
-                  <div key={p.note}>
+                  <div key={p.note} data-place={p.place}>
                     <dt className="result-rank">
                       {p.place}
                       <span>{p.ordinal}</span>
                     </dt>
-                    <dd className="mono text-[0.66rem] tracking-[0.04em] text-text-muted">
+                    <dd className="mono text-[0.9rem] tracking-[0.04em] text-text-muted">
                       {p.note}
                     </dd>
                   </div>

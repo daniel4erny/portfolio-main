@@ -88,15 +88,15 @@ export default function ContactForm() {
           {status !== "sending" && <IconArrow width={15} height={15} />}
         </button>
 
-        <p aria-live="polite" className="mono text-[0.75rem]">
+        <p aria-live="polite" className="mono text-[1rem]">
           {status === "sent" && (
             <span className="text-emerald-400">
-              Sent — you&apos;ll get a confirmation by email.
+              Sent. You&apos;ll get a confirmation email.
             </span>
           )}
           {status === "error" && (
             <span className="text-red-400">
-              Didn&apos;t go through. Email me directly instead.
+              That didn&apos;t go through, please email me directly.
             </span>
           )}
         </p>

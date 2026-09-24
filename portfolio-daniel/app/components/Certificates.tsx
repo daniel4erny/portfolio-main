@@ -89,7 +89,6 @@ function Card({
       </div>
 
       <footer className="cert-foot">
-        <span className="cert-credits">{cert.credits}</span>
         <span className="cert-code mono">#{cert.code}</span>
         <a
           href={cert.href}

@@ -24,7 +24,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    // Resend's constructor throws without a key, which surfaced as a bare 500
+    console.error("contact: RESEND_API_KEY is not set");
+    return Response.json({ error: "Email is not configured" }, { status: 503 });
+  }
+  const resend = new Resend(apiKey);
 
   // notification to site owner
   const { error } = await resend.emails.send({

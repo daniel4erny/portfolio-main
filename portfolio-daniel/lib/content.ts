@@ -69,7 +69,7 @@ export const stack: StackItem[] = [
     name: "Go",
     kicker: "Servers & CLIs",
     color: "#00add8",
-    body: "Goroutines and channels make concurrency easy to follow, and the result is one static binary. gowlan and minesweeper-go are both written in Go.",
+    body: "Goroutines and channels make concurrency easy to follow, and the result is one static binary. gowlan, minesweeper-go and redis-golang are all written in Go.",
     chips: ["WebSockets", "TUI", "net/http"],
   },
   {
@@ -84,6 +84,8 @@ export const stack: StackItem[] = [
 
 export type ProjectLink = { label: string; href: string; kind: "live" | "code" };
 
+export type ProjectImage = { src: string; alt: string };
+
 export type Project = {
   index: string;
   title: string;
@@ -93,7 +95,9 @@ export type Project = {
   tech: string[];
   primary: string;
   links: ProjectLink[];
+  /** featured projects get a screenshot and the large cards at the top */
   featured?: boolean;
+  image?: ProjectImage;
 };
 
 export const projects: Project[] = [
@@ -107,6 +111,7 @@ export const projects: Project[] = [
     primary: "https://tep.training",
     links: [{ label: "tep.training", href: "https://tep.training", kind: "live" }],
     featured: true,
+    image: { src: "/projects/tep.jpg", alt: "TEP landing page: \"Training that actually changes behaviour\"" },
   },
   {
     index: "02",
@@ -121,6 +126,7 @@ export const projects: Project[] = [
       { label: "Source", href: "https://github.com/daniel4erny/forchan", kind: "code" },
     ],
     featured: true,
+    image: { src: "/projects/forchan.jpg", alt: "forchan home page listing the technology, sport and games boards" },
   },
   {
     index: "03",
@@ -132,6 +138,7 @@ export const projects: Project[] = [
     primary: "https://doom.djt-group.com",
     links: [{ label: "doom.djt-group.com", href: "https://doom.djt-group.com", kind: "live" }],
     featured: true,
+    image: { src: "/projects/doom.jpg", alt: "DOOM Museum landing page with the Doom Slayer" },
   },
   {
     index: "04",
@@ -151,6 +158,17 @@ export const projects: Project[] = [
     primary: "https://github.com/daniel4erny/minesweeper-go",
     links: [
       { label: "Source", href: "https://github.com/daniel4erny/minesweeper-go", kind: "code" },
+    ],
+  },
+  {
+    index: "06",
+    title: "redis-golang",
+    kicker: "Key-value server on the Redis protocol",
+    body: "A key-value server in Go that speaks Redis's RESP wire format. A hand-written parser reads the length-prefixed commands and handles PING, GET, SET and DEL. Each connection gets its own goroutine, and the store sits behind a read-write mutex so reads can run in parallel. Every packet is logged on one line with CR/LF escaped.",
+    tech: ["Go", "TCP", "RESP", "sync.RWMutex", "charm/log"],
+    primary: "https://github.com/daniel4erny/redis-golang",
+    links: [
+      { label: "Source", href: "https://github.com/daniel4erny/redis-golang", kind: "code" },
     ],
   },
 ];
@@ -250,10 +268,13 @@ export const certificates: Certificate[] = [
   },
 ];
 
-/** The brand mark handles "back to top", so the hero needs no link of its own. */
+/**
+ * The brand mark handles "back to top", so the hero needs no link of its own.
+ * Keep these in page order: TopNav highlights the last one scrolled past.
+ */
 export const nav = [
-  { label: "stack", href: "#stack" },
   { label: "work", href: "#projects" },
   { label: "results", href: "#awards" },
+  { label: "stack", href: "#stack" },
   { label: "contact", href: "#contact" },
 ];

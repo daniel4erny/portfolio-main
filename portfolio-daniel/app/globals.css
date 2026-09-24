@@ -354,21 +354,13 @@ body {
 .glass:is(:hover, :has(:focus-visible))::before { opacity: 1; }
 
 /* ── project cards ───────────────────────────── */
-/* The slot holds the row height; the card floats inside it, so expanding on
-   hover slides out over what follows instead of stretching its whole row. */
-.project-slot {
-  position: relative;
-  min-height: 13.75rem;
-}
-.project-slot:is(:hover, :has(:focus-visible)) { z-index: 10; }
-
+/* Everything is visible up front — hover only adds light and tilt, it never
+   reveals content or changes the card's size. */
 .project-card {
-  position: absolute;
-  inset: 0 0 auto 0;
-  min-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.6rem 1.5rem 1.5rem;
+  padding: 1.25rem 1.25rem 1.5rem;
 }
 
 /* lifts content clear of the specular pseudo-element */
@@ -382,19 +374,11 @@ body {
   border-radius: inherit;
 }
 
-/* collapsed to zero until hover: 0fr → 1fr is the one way to animate to an
-   auto height without measuring it in JS */
-.project-reveal {
-  display: grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  transition: grid-template-rows 0.45s var(--ease-out), opacity 0.3s ease;
-}
-.project-reveal > div { overflow: hidden; min-height: 0; }
-
-.project-card:is(:hover, :has(:focus-visible)) .project-reveal {
-  grid-template-rows: 1fr;
-  opacity: 1;
+.project-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0.35rem 0.25rem 0;
 }
 
 /* ── certificate fan ─────────────────────────── */
@@ -629,13 +613,47 @@ body {
   .cert-card, .cert-stage { transition: none; }
 }
 
-/* no hover to give: nothing hides, and the cards go back into the flow */
+/* the screenshot sits in the card like a framed print, not bled to its edge */
+.project-shot {
+  margin-bottom: 1.4rem;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  aspect-ratio: 16 / 10;
+  background: var(--surface-2);
+}
+.project-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  /* pulls the brighter shots down to the page's level until you engage */
+  filter: brightness(0.82) saturate(0.9);
+  transition: filter 0.4s ease, transform 0.6s var(--ease-out);
+}
+.project-card:is(:hover, :has(:focus-visible)) .project-shot img {
+  filter: none;
+  transform: scale(1.015);
+}
+
+@media (min-width: 1024px) {
+  .project-card--wide {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    column-gap: 2.25rem;
+    align-items: stretch;
+  }
+  .project-card--wide .project-shot {
+    margin-bottom: 0;
+    align-self: center;
+  }
+  .project-card--wide .project-body { padding: 0.75rem 0.5rem 0.25rem 0; }
+}
+
+/* no hover to give: keep touch taps from leaving a card tilted */
 @media (hover: none) {
-  .hover-hint { display: none; }
-  .project-slot { min-height: 0; }
-  .project-card { position: static; }
-  .project-reveal { grid-template-rows: 1fr; opacity: 1; }
-  .glass { transform: none; }
+  .glass:is(:hover, :has(:focus-visible)) { transform: none; }
 }
 
 .project-arrow {

@@ -9,14 +9,18 @@ import { useRef, type ReactNode } from "react";
  * render path, so a pointer moving across a grid of these costs nothing.
  */
 
-const MAX_TILT = 4.5; // degrees — any more and it stops reading as a surface
+// degrees — any more and it stops reading as a surface. Wide cards want less:
+// the same angle swings their far edge a lot further out.
+const MAX_TILT = 4.5;
 
 export default function GlassCard({
   children,
   className = "",
+  maxTilt = MAX_TILT,
 }: {
   children: ReactNode;
   className?: string;
+  maxTilt?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -29,8 +33,8 @@ export default function GlassCard({
     const y = (e.clientY - r.top) / r.height;
     el.style.setProperty("--mx", `${(x * 100).toFixed(2)}%`);
     el.style.setProperty("--my", `${(y * 100).toFixed(2)}%`);
-    el.style.setProperty("--ry", `${((x - 0.5) * 2 * MAX_TILT).toFixed(2)}deg`);
-    el.style.setProperty("--rx", `${((0.5 - y) * 2 * MAX_TILT).toFixed(2)}deg`);
+    el.style.setProperty("--ry", `${((x - 0.5) * 2 * maxTilt).toFixed(2)}deg`);
+    el.style.setProperty("--rx", `${((0.5 - y) * 2 * maxTilt).toFixed(2)}deg`);
   }
 
   function reset() {

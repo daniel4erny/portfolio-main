@@ -13,10 +13,6 @@ export default function Home() {
       <TopNav />
       <main>
         <Hero />
-        <Stack />
-        <div className="shell">
-          <hr className="rule" />
-        </div>
         <Projects />
         <div className="shell">
           <hr className="rule" />
@@ -26,6 +22,10 @@ export default function Home() {
           <hr className="rule" />
         </div>
         <Certificates />
+        <div className="shell">
+          <hr className="rule" />
+        </div>
+        <Stack />
         <div className="shell">
           <hr className="rule" />
         </div>

@@ -354,13 +354,19 @@ body {
 .glass:is(:hover, :has(:focus-visible))::before { opacity: 1; }
 
 /* ── project cards ───────────────────────────── */
-/* Everything is visible up front — hover only adds light and tilt, it never
-   reveals content or changes the card's size. */
+/* The card itself never changes size. On hover a drawer with the description
+   slides out from its bottom edge and floats over whatever sits below, so the
+   grid never reflows; the hovered slot is raised above its neighbours. */
+.project-slot:is(:hover, :has(:focus-visible)) {
+  position: relative;
+  z-index: 10;
+}
+
 .project-card {
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.25rem 1.25rem 1.5rem;
+  padding: 1rem 1rem 1.2rem;
 }
 
 /* lifts content clear of the specular pseudo-element */
@@ -378,7 +384,48 @@ body {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 0.35rem 0.25rem 0;
+  padding: 0.25rem 0.25rem 0;
+}
+
+/* the card and its drawer read as one surface: the card gives up its bottom
+   corners and edge while the drawer is out */
+.project-card:is(:hover, :has(:focus-visible)) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+}
+
+.project-card > .project-drawer {
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  right: -1px;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  border: 1px solid rgba(34, 211, 238, 0.32);
+  border-top: 0;
+  border-radius: 0 0 20px 20px;
+  background: #0f1621;
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.95);
+  pointer-events: none;
+  /* collapsed to zero until hover: 0fr → 1fr animates to an auto height
+     without measuring it in JS */
+  transition: grid-template-rows 0.45s var(--ease-out), opacity 0.25s ease;
+}
+.project-drawer > div {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0 1.25rem;
+  transition: padding 0.45s var(--ease-out);
+}
+.project-card:is(:hover, :has(:focus-visible)) > .project-drawer {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  pointer-events: auto;
+}
+.project-card:is(:hover, :has(:focus-visible)) > .project-drawer > div {
+  padding: 0.15rem 1.25rem 1.3rem;
 }
 
 /* ── certificate fan ─────────────────────────── */
@@ -615,7 +662,7 @@ body {
 
 /* the screenshot sits in the card like a framed print, not bled to its edge */
 .project-shot {
-  margin-bottom: 1.4rem;
+  margin-bottom: 1rem;
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid var(--line);
@@ -637,23 +684,23 @@ body {
   transform: scale(1.015);
 }
 
-@media (min-width: 1024px) {
-  .project-card--wide {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-    column-gap: 2.25rem;
-    align-items: stretch;
-  }
-  .project-card--wide .project-shot {
-    margin-bottom: 0;
-    align-self: center;
-  }
-  .project-card--wide .project-body { padding: 0.75rem 0.5rem 0.25rem 0; }
-}
-
 /* no hover to give: keep touch taps from leaving a card tilted */
 @media (hover: none) {
   .glass:is(:hover, :has(:focus-visible)) { transform: none; }
+  .hover-hint { display: none; }
+  /* no hover to open it: the drawer is part of the card, always open */
+  .project-card:is(:hover, :has(:focus-visible)) { border-radius: 20px; border-bottom-color: rgba(34, 211, 238, 0.32); }
+  .project-card > .project-drawer {
+    position: static;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .project-drawer > div,
+  .project-card:is(:hover, :has(:focus-visible)) > .project-drawer > div { padding: 1rem 0.25rem 0; }
 }
 
 .project-arrow {

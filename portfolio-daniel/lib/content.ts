@@ -69,7 +69,7 @@ export const stack: StackItem[] = [
     name: "Go",
     kicker: "Servers & CLIs",
     color: "#00add8",
-    body: "Goroutines and channels make concurrency easy to follow, and the result is one static binary. gowlan, minesweeper-go and redis-golang are all written in Go.",
+    body: "Goroutines and channels make concurrency easy to follow, and the result is one static binary. gowlan, minesweeper-go and redis-golang are all written in Go, and chip8-emul compiles it to WebAssembly.",
     chips: ["WebSockets", "TUI", "net/http"],
   },
   {
@@ -142,6 +142,19 @@ export const projects: Project[] = [
   },
   {
     index: "04",
+    title: "chip8-emul",
+    kicker: "CHIP-8 emulator in the browser",
+    status: "Live",
+    body: "A CHIP-8 interpreter written in Go and compiled to WebAssembly, so it runs in the browser. The CPU executes ten instructions per 60 Hz frame and hands the 64×32 framebuffer to a canvas, while the delay and sound timers count down on their own goroutine and drive a Web Audio beep. Pong, Tetris, Space Invaders and a few other ROMs are built in, or you can load your own .ch8 file.",
+    tech: ["Go", "WebAssembly", "syscall/js", "Canvas", "Web Audio"],
+    primary: "https://chip8-emul.vercel.app",
+    links: [
+      { label: "chip8-emul.vercel.app", href: "https://chip8-emul.vercel.app", kind: "live" },
+      { label: "Source", href: "https://github.com/daniel4erny/chip8-emul", kind: "code" },
+    ],
+  },
+  {
+    index: "05",
     title: "gowlan",
     kicker: "LAN chat over WebSockets",
     body: "A chat server in Go. One hub goroutine owns every connection and broadcasts over channels, so there isn't a single mutex. Ping/pong with read deadlines drops dead clients. The client is a Bubble Tea TUI and the server ships as a Docker image.",
@@ -150,7 +163,7 @@ export const projects: Project[] = [
     links: [{ label: "Source", href: "https://github.com/daniel4erny/gowlan", kind: "code" }],
   },
   {
-    index: "05",
+    index: "06",
     title: "minesweeper-go",
     kicker: "Minesweeper in the terminal",
     body: "Keyboard-only Minesweeper on tcell. Three difficulty presets and custom board sizes, flood-fill reveal, flags and a timer. It's on the AUR and released under the Unlicense.",
@@ -161,7 +174,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    index: "06",
+    index: "07",
     title: "redis-golang",
     kicker: "Key-value server on the Redis protocol",
     body: "A key-value server in Go that speaks Redis's RESP wire format. A hand-written parser reads the length-prefixed commands and handles PING, GET, SET and DEL. Each connection gets its own goroutine, and the store sits behind a read-write mutex so reads can run in parallel. Every packet is logged on one line with CR/LF escaped.",

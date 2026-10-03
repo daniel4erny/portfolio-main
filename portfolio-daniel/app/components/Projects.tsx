@@ -119,12 +119,12 @@ export default function Projects() {
         <>
           <Reveal>
             <p className="mono mt-16 mb-5 text-[0.92rem] tracking-[0.04em] text-text-muted">
-              Smaller builds — terminal &amp; network tools in Go
+              Smaller builds — Go, from the terminal to WebAssembly
             </p>
           </Reveal>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             {rest.map((p, i) => (
-              <ProjectCard key={p.title} project={p} delay={0.04 + (i % 3) * 0.06} />
+              <ProjectCard key={p.title} project={p} delay={0.04 + (i % 4) * 0.06} />
             ))}
           </div>
         </>

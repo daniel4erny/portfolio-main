@@ -14,21 +14,9 @@ export default function Home() {
       <main>
         <Hero />
         <Projects />
-        <div className="shell">
-          <hr className="rule" />
-        </div>
         <Awards />
-        <div className="shell">
-          <hr className="rule" />
-        </div>
         <Certificates />
-        <div className="shell">
-          <hr className="rule" />
-        </div>
         <Stack />
-        <div className="shell">
-          <hr className="rule" />
-        </div>
         <Contact />
       </main>
       <Footer />

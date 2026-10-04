@@ -1,17 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 import SceneBackground from "./components/SceneBackground";
 
-const spaceGrotesk = Space_Grotesk({
+// one family; the wdth axis carries the hierarchy instead of a second face
+const archivo = Archivo({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-jetbrains-mono",
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -58,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${archivo.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col" style={{ isolation: "isolate" }}>
         <SceneBackground />

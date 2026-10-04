@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { IconArrow } from "./Icons";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -81,21 +80,20 @@ export default function ContactForm() {
       <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
-          className="btn btn--primary"
+          className="btn"
           disabled={status === "sending"}
         >
           {status === "sending" ? "Sending…" : "Send message"}
-          {status !== "sending" && <IconArrow width={15} height={15} />}
         </button>
 
-        <p aria-live="polite" className="mono text-[1rem]">
+        <p aria-live="polite" className="form-status">
           {status === "sent" && (
-            <span className="text-emerald-400">
+            <span>
               Sent. You&apos;ll get a confirmation email.
             </span>
           )}
           {status === "error" && (
-            <span className="text-red-400">
+            <span data-error>
               That didn&apos;t go through, please email me directly.
             </span>
           )}

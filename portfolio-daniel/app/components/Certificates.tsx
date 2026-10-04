@@ -1,225 +1,27 @@
-"use client";
-
-import { useRef, useState } from "react";
-import Reveal from "./Reveal";
-import { certificates, type Certificate } from "@/lib/content";
-import { IconArrow } from "./Icons";
-
-/**
- * The certificates as a fan of 3D cards, centred on the page. The active card
- * stands at the front; the others spread out to either side, turned and set
- * back in depth. Clicking a side card, the arrow buttons, the arrow keys or a
- * swipe brings another card to the front. The whole fan leans a little
- * toward the pointer, which also drives the foil highlight.
- */
-
-const SWIPE_PX = 60;
-const MAX_TILT = 6; // degrees
-
-/* the Python mark's path, split into its two snakes so each gets its colour */
-const PY_TOP = "M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09z";
-const PY_BOTTOM = "M21.04 6.11l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z";
-
-function PythonMark() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className="cert-logo">
-      <path d={PY_TOP} fill="#4b8bbe" />
-      <path d={PY_BOTTOM} fill="#ffd43b" />
-    </svg>
-  );
-}
-
-/* the Java mark (Devicon), in Java's own blue and orange */
-const JAVA_CUP = "M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092 0 0 2.871 1.795 6.873 3.351-24.439 10.47-55.308-.607-36.115-5.969zm-2.988-13.665s-5.348 3.959 2.823 4.805c10.567 1.091 18.91 1.18 33.354-1.6 0 0 1.993 2.025 5.132 3.131-29.542 8.64-62.446.68-41.309-6.336z M102.123 108.229s3.529 2.91-3.888 5.159c-14.102 4.272-58.706 5.56-71.094.171-4.451-1.938 3.899-4.625 6.526-5.192 2.739-.593 4.303-.485 4.303-.485-4.953-3.487-32.013 6.85-13.743 9.815 49.821 8.076 90.817-3.637 77.896-9.468zM49.912 70.294s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326 9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.544 3.238-54.731-2.958 10.832-5.239 19.644-4.643 19.644-4.643zm40.697 22.747c23.421-12.167 12.591-23.86 5.032-22.285-1.848.385-2.677.72-2.677.72s.688-1.079 2-1.543c14.953-5.255 26.451 15.503-4.823 23.725 0-.002.359-.327.468-.617z M52.214 126.021c22.476 1.437 57-.8 57.817-11.436 0 0-1.571 4.032-18.577 7.231-19.186 3.612-42.854 3.191-56.887.874 0 .001 2.875 2.381 17.647 3.331z";
-const JAVA_STEAM = "M69.802 61.271c6.025 6.935-1.58 13.17-1.58 13.17s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58 0 .001-42.731 10.67-22.324 34.187z M76.491 1.587S89.459 14.563 64.188 34.51c-20.266 16.006-4.621 25.13-.007 35.559-11.831-10.673-20.509-20.07-14.688-28.815C58.041 28.42 81.722 22.195 76.491 1.587z";
-
-function JavaMark() {
-  return (
-    <svg viewBox="0 0 128 128" aria-hidden className="cert-logo">
-      <path d={JAVA_CUP} fill="#5382a1" />
-      <path d={JAVA_STEAM} fill="#e76f00" />
-    </svg>
-  );
-}
-
-function Card({
-  cert,
-  offset,
-  onSelect,
-}: {
-  cert: Certificate;
-  /** position relative to the active card: 0 is front, ±1 either side */
-  offset: number;
-  onSelect: () => void;
-}) {
-  const active = offset === 0;
-  return (
-    <article
-      className="cert-card"
-      data-lang={cert.lang}
-      data-active={active || undefined}
-      style={{ "--o": offset, "--d": Math.abs(offset) } as React.CSSProperties}
-      aria-hidden={!active}
-      onClick={active ? undefined : onSelect}
-    >
-      {cert.lang === "python" ? <PythonMark /> : <JavaMark />}
-
-      <p className="cert-issuer mono">{cert.issuer}</p>
-
-      <div className="cert-title">
-        <h3>{cert.course}</h3>
-        <p>{cert.series}</p>
-      </div>
-
-      <footer className="cert-foot">
-        <span className="cert-code mono">#{cert.code}</span>
-        <a
-          href={cert.href}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="cert-verify mono"
-          tabIndex={active ? 0 : -1}
-          onPointerDown={(e) => e.stopPropagation()}
-        >
-          verify
-          <IconArrow width={13} height={13} />
-        </a>
-      </footer>
-    </article>
-  );
-}
+import { certificates } from "@/lib/content";
 
 export default function Certificates() {
-  const count = certificates.length;
-  // start on the middle card so the fan opens symmetrically
-  const [active, setActive] = useState(Math.floor(count / 2));
-  const stageRef = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ x: number; dx: number } | null>(null);
-  const swiped = useRef(false);
-
-  const go = (i: number) => setActive(((i % count) + count) % count);
-
-  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    if (drag.current) drag.current.dx = e.clientX - drag.current.x;
-    if (e.pointerType !== "mouse") return;
-    const el = stageRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width;
-    const y = (e.clientY - r.top) / r.height;
-    el.style.setProperty("--mx", `${(x * 100).toFixed(1)}%`);
-    el.style.setProperty("--sy", `${((x - 0.5) * 2 * MAX_TILT).toFixed(2)}deg`);
-    el.style.setProperty("--sx", `${((0.5 - y) * 2 * MAX_TILT * 0.6).toFixed(2)}deg`);
-  }
-
-  function resetTilt() {
-    const el = stageRef.current;
-    if (!el) return;
-    el.style.setProperty("--sx", "0deg");
-    el.style.setProperty("--sy", "0deg");
-    el.style.setProperty("--mx", "50%");
-  }
-
-  function onPointerUp() {
-    const d = drag.current;
-    drag.current = null;
-    swiped.current = false;
-    if (!d) return;
-    if (d.dx < -SWIPE_PX) {
-      go(active + 1);
-      swiped.current = true;
-    } else if (d.dx > SWIPE_PX) {
-      go(active - 1);
-      swiped.current = true;
-    }
-  }
-
   return (
     <section id="certificates" className="section shell">
-      <div className="cert-intro">
-        <Reveal>
-          <p className="eyebrow mb-5">Courses</p>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <h2 className="h2">Certificates</h2>
-        </Reveal>
-        <Reveal delay={0.12}>
-          <p className="lede mt-6 max-w-[44ch]">
-            Three University of Helsinki MOOCs, two in Python and one in Java.
-            Each card links to the certificate on the issuer&apos;s own site.
-          </p>
-        </Reveal>
-      </div>
+      <h2 className="h2">Courses</h2>
+      <p className="section-note">
+        University of Helsinki programming MOOCs. Each links to the
+        certificate on the university&apos;s validation page.
+      </p>
 
-      <Reveal delay={0.1}>
-        <div
-          className="cert-scene"
-          role="group"
-          aria-roledescription="carousel"
-          aria-label="Certificates"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            // keys pressed on the verify link are the link's own business
-            if (e.target !== e.currentTarget) return;
-            if (e.key === "ArrowRight") {
-              e.preventDefault();
-              go(active + 1);
-            } else if (e.key === "ArrowLeft") {
-              e.preventDefault();
-              go(active - 1);
-            }
-          }}
-          onPointerDown={(e) => {
-            drag.current = { x: e.clientX, dx: 0 };
-          }}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={() => (drag.current = null)}
-          onPointerLeave={() => {
-            resetTilt();
-            drag.current = null;
-          }}
-          // a swipe that ends on a side card must not also select it
-          onClickCapture={(e) => {
-            if (swiped.current) {
-              e.stopPropagation();
-              swiped.current = false;
-            }
-          }}
-        >
-          <div ref={stageRef} className="cert-stage">
-            {certificates.map((cert, i) => {
-              // wrap so every card sits within ±half the deck of the active one
-              let offset = i - active;
-              if (offset > count / 2) offset -= count;
-              if (offset < -count / 2) offset += count;
-              return <Card key={cert.code} cert={cert} offset={offset} onSelect={() => go(i)} />;
-            })}
-          </div>
-        </div>
-      </Reveal>
-
-      <div className="cert-controls">
-        <button type="button" className="cert-btn" onClick={() => go(active - 1)} aria-label="Previous certificate">
-          <IconArrow width={16} height={16} style={{ transform: "rotate(-135deg)" }} />
-        </button>
-        <div className="cert-dots" aria-live="polite">
-          {certificates.map((c, i) => (
-            <button
-              key={c.code}
-              type="button"
-              className="cert-dot"
-              data-on={i === active || undefined}
-              aria-label={c.course}
-              aria-current={i === active || undefined}
-              onClick={() => go(i)}
-            />
-          ))}
-        </div>
-        <button type="button" className="cert-btn" onClick={() => go(active + 1)} aria-label="Next certificate">
-          <IconArrow width={16} height={16} style={{ transform: "rotate(45deg)" }} />
-        </button>
-      </div>
+      <ul className="certs">
+        {certificates.map((c) => (
+          <li key={c.code} className="cert">
+            <div>
+              <h3 className="build-title">{c.course}</h3>
+              <p className="kicker">{c.series}</p>
+            </div>
+            <a href={c.href} target="_blank" rel="noreferrer noopener">
+              View certificate
+            </a>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

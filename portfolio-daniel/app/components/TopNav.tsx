@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { nav, profile } from "@/lib/content";
 
 export default function TopNav() {
   const [active, setActive] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const barRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     // the hero is tracked too, so nothing is highlighted while you're on it
@@ -24,12 +23,6 @@ export default function TopNav() {
       const id = current ? `#${current.id}` : null;
       setActive(id === "#hero" ? null : id);
       setScrolled(window.scrollY > 24);
-
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      barRef.current?.style.setProperty(
-        "--p",
-        max > 0 ? (window.scrollY / max).toFixed(4) : "0"
-      );
     }
 
     let ticking = false;
@@ -52,7 +45,7 @@ export default function TopNav() {
   }, []);
 
   return (
-    <header ref={barRef} className="topbar" data-scrolled={scrolled}>
+    <header className="topbar" data-scrolled={scrolled}>
       <div className="topbar-inner shell">
         <a href="#hero" className="topbar-brand">
           {profile.name}
@@ -72,8 +65,6 @@ export default function TopNav() {
           ))}
         </nav>
       </div>
-
-      <span className="topbar-progress" aria-hidden />
     </header>
   );
 }

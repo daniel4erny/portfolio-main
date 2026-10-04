@@ -104,14 +104,14 @@ export const projects: Project[] = [
       { label: "Source", href: "https://github.com/daniel4erny/chip8-emul", kind: "code" },
     ],
   },
-  {
-    title: "gowlan",
-    kicker: "LAN chat over WebSockets",
-    body: "A chat server in Go. One hub goroutine owns every connection and broadcasts over channels, so there isn't a single mutex. Ping/pong with read deadlines drops dead clients. The client is a Bubble Tea TUI and the server ships as a Docker image.",
-    tech: ["Go", "WebSockets", "gorilla/websocket", "Bubble Tea", "Docker"],
-    primary: "https://github.com/daniel4erny/gowlan",
-    links: [{ label: "Source", href: "https://github.com/daniel4erny/gowlan", kind: "code" }],
-  },
+  // {
+  //   title: "gowlan",
+  //   kicker: "LAN chat over WebSockets",
+  //   body: "A chat server in Go. One hub goroutine owns every connection and broadcasts over channels, so there isn't a single mutex. Ping/pong with read deadlines drops dead clients. The client is a Bubble Tea TUI and the server ships as a Docker image.",
+  //   tech: ["Go", "WebSockets", "gorilla/websocket", "Bubble Tea", "Docker"],
+  //   primary: "https://github.com/daniel4erny/gowlan",
+  //   links: [{ label: "Source", href: "https://github.com/daniel4erny/gowlan", kind: "code" }],
+  // },
   {
     title: "minesweeper-go",
     kicker: "Minesweeper in the terminal",
@@ -122,16 +122,16 @@ export const projects: Project[] = [
       { label: "Source", href: "https://github.com/daniel4erny/minesweeper-go", kind: "code" },
     ],
   },
-  {
-    title: "redis-golang",
-    kicker: "Key-value server on the Redis protocol",
-    body: "A key-value server in Go that speaks Redis's RESP wire format. A hand-written parser reads the length-prefixed commands and handles PING, GET, SET and DEL. Each connection gets its own goroutine, and the store sits behind a read-write mutex so reads can run in parallel. Every packet is logged on one line with CR/LF escaped.",
-    tech: ["Go", "TCP", "RESP", "sync.RWMutex", "charm/log"],
-    primary: "https://github.com/daniel4erny/redis-golang",
-    links: [
-      { label: "Source", href: "https://github.com/daniel4erny/redis-golang", kind: "code" },
-    ],
-  },
+  // {
+  //   title: "redis-golang",
+  //   kicker: "Key-value server on the Redis protocol",
+  //   body: "A key-value server in Go that speaks Redis's RESP wire format. A hand-written parser reads the length-prefixed commands and handles PING, GET, SET and DEL. Each connection gets its own goroutine, and the store sits behind a read-write mutex so reads can run in parallel. Every packet is logged on one line with CR/LF escaped.",
+  //   tech: ["Go", "TCP", "RESP", "sync.RWMutex", "charm/log"],
+  //   primary: "https://github.com/daniel4erny/redis-golang",
+  //   links: [
+  //     { label: "Source", href: "https://github.com/daniel4erny/redis-golang", kind: "code" },
+  //   ],
+  // },
 ];
 
 export type Placement = { place: string; ordinal: string; note: string };

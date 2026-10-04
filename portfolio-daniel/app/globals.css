@@ -5,7 +5,7 @@
    ═══════════════════════════════════════════════════════════ */
 :root {
   /* the page sits on the 3D field, so the base matches its clear colour */
-  --bg: #04060a;
+  --bg: #000000;
 
   /* cyan is the field's crest colour; on the page it only marks links */
   --accent: #22d3ee;
@@ -174,13 +174,13 @@ button:focus-visible {
    forms travel through */
 .scene-veil--hero {
   background:
-    radial-gradient(42% 34% at 50% 50%, rgba(4, 6, 10, 0.62) 0%, rgba(4, 6, 10, 0.25) 60%, transparent 100%),
-    linear-gradient(to bottom, rgba(4, 6, 10, 0.45), transparent 14%, transparent 88%, rgba(4, 6, 10, 0.6));
+    radial-gradient(42% 34% at 50% 50%, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.25) 60%, transparent 100%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent 14%, transparent 88%, rgba(0, 0, 0, 0.6));
 }
 .scene-veil--field {
   background:
-    radial-gradient(70% 55% at 22% 48%, rgba(4, 6, 10, 0.8) 0%, rgba(4, 6, 10, 0.35) 50%, transparent 75%),
-    linear-gradient(to bottom, rgba(4, 6, 10, 0.45), transparent 14%, transparent 88%, rgba(4, 6, 10, 0.6));
+    radial-gradient(70% 55% at 22% 48%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.35) 50%, transparent 75%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent 14%, transparent 88%, rgba(0, 0, 0, 0.6));
 }
 
 
@@ -212,7 +212,7 @@ button:focus-visible {
 }
 /* the orb sits right behind the copy; a soft dark halo keeps the type sharp */
 .hero-content > * {
-  text-shadow: 0 2px 28px rgba(4, 6, 10, 0.95), 0 0 6px rgba(4, 6, 10, 0.6);
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.6);
 }
 
 .hero-name {
@@ -445,7 +445,7 @@ button:focus-visible {
   padding: 0.8rem 0.95rem;
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(4, 6, 10, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   color: var(--text-primary);
   font: inherit;
   outline: none;
@@ -485,7 +485,7 @@ textarea.form-field { resize: vertical; min-height: 9rem; }
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 .topbar[data-scrolled="true"] {
-  background: rgba(4, 6, 10, 0.94);
+  background: rgba(0, 0, 0, 0.94);
   border-bottom-color: var(--line);
 }
 

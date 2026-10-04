@@ -287,29 +287,43 @@ button:focus-visible {
   object-position: top;
 }
 
+/* the smaller projects: a compact grid, each one a short entry with its
+   description held to three lines */
 .builds {
+  display: grid;
+  gap: 0 2.5rem;
   margin-top: 1.5rem;
   border-top: 1px solid var(--line);
 }
+@media (min-width: 720px) {
+  .builds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1180px) {
+  .builds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 
 .build {
-  display: grid;
-  gap: 0.25rem;
-  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem 0 1.5rem;
   border-bottom: 1px solid var(--line);
 }
-@media (min-width: 900px) {
-  .build {
-    grid-template-columns: 15rem minmax(0, 1fr) 11rem;
-    gap: 2.5rem;
-  }
-  .build .body-text { margin-top: 0; }
-  .build .links {
-    margin-top: 0;
-    flex-direction: column;
-    align-items: flex-end;
-  }
+.build .build-title { font-size: 1.1rem; }
+.build .build-title a { color: inherit; text-decoration: none; }
+.build .build-title a:hover { color: var(--accent); }
+.build .kicker { font-size: 0.95rem; }
+.build .body-text {
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
+.build .tech { margin-top: 0.7rem; font-size: 0.88rem; }
+.build .links { margin-top: auto; padding-top: 0.8rem; font-size: 0.95rem; }
 
 /* ═══════════════════════════════════════════════════════════
    results

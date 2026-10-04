@@ -82,8 +82,6 @@ export const projects: Project[] = [
       { label: "forchan.vercel.app", href: "https://forchan.vercel.app", kind: "live" },
       { label: "Source", href: "https://github.com/daniel4erny/forchan", kind: "code" },
     ],
-    featured: true,
-    image: { src: "/projects/forchan.jpg", alt: "forchan home page listing the technology, sport and games boards" },
   },
   {
     title: "DOOM Museum",

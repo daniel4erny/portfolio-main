@@ -62,18 +62,18 @@ export default function Projects() {
 
       {rest.length > 0 && (
         <>
-          <h3 className="h3 mt-24">Smaller projects in Go</h3>
+          <h3 className="h3 mt-24">Smaller projects</h3>
           <ul className="builds">
             {rest.map((p) => (
               <li key={p.title} className="build">
-                <div>
-                  <h4 className="build-title">{p.title}</h4>
-                  <p className="kicker">{p.kicker}</p>
-                </div>
-                <div>
-                  <p className="body-text">{p.body}</p>
-                  <p className="tech">{p.tech.join(", ")}</p>
-                </div>
+                <h4 className="build-title">
+                  <a href={p.primary} target="_blank" rel="noreferrer noopener">
+                    {p.title}
+                  </a>
+                </h4>
+                <p className="kicker">{p.kicker}</p>
+                <p className="body-text">{p.body}</p>
+                <p className="tech">{p.tech.join(", ")}</p>
                 <Links project={p} />
               </li>
             ))}

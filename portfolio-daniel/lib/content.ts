@@ -222,6 +222,13 @@ export const certificates: Certificate[] = [
     code: "a3wwfcmf03f",
     href: "https://certificates.mooc.fi/validate/a3wwfcmf03f",
   },
+  {
+    course: "Linux Unhatched",
+    series: "Cisco Networking Academy",
+    issuer: "Cisco",
+    code: "5e4b6c7a-5b0a-4c24-a397-a8440eb32c1e",
+    href: "https://www.credly.com/badges/5e4b6c7a-5b0a-4c24-a397-a8440eb32c1e",
+  },
 ];
 
 /**

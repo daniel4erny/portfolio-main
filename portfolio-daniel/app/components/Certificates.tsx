@@ -5,8 +5,9 @@ export default function Certificates() {
     <section id="certificates" className="section shell">
       <h2 className="h2">Courses</h2>
       <p className="section-note">
-        University of Helsinki programming MOOCs. Each links to the
-        certificate on the university&apos;s validation page.
+        University of Helsinki programming MOOCs and a Cisco Networking
+        Academy course. Each links to the certificate on the issuer&apos;s
+        validation page.
       </p>
 
       <ul className="certs">
